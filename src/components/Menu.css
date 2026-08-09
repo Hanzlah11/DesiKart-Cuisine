@@ -1,0 +1,265 @@
+.menu-section {
+  position: relative;
+  max-width: 1280px;
+  margin: 6rem auto;
+  padding: 4rem 2rem;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+/* Background Smoke & Ember Canvas */
+.menu-bg-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.menu-content-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.section-title {
+  font-family: var(--font-prime);
+  font-size: 4rem;
+  letter-spacing: 2.5px;
+  color: var(--logo-cream);
+  text-transform: uppercase;
+}
+
+.section-subtitle {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--logo-yellow);
+  font-size: 1.25rem;
+  margin-top: 0.4rem;
+}
+
+/* --- Sticky Sub-Navbar for Categories --- */
+.menu-sub-navbar {
+  position: sticky;
+  top: 85px; /* Sits right below the main cinematic navbar */
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border-dark);
+  border-bottom: 1px solid var(--border-dark);
+  z-index: 90;
+  margin-bottom: 3.5rem;
+  padding: 0.8rem 0;
+  overflow-x: auto;
+  scrollbar-width: none; /* Hide scrollbar for clean look */
+}
+
+.menu-sub-navbar::-webkit-scrollbar {
+  display: none;
+}
+
+.sub-nav-container {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  min-width: max-content;
+  padding: 0 1rem;
+}
+
+.sub-nav-tab {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-dark);
+  color: var(--logo-cream);
+  padding: 0.6rem 1.4rem;
+  border-radius: 30px;
+  font-family: var(--font-prime);
+  font-size: 1rem;
+  letter-spacing: 1.2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.sub-nav-tab.active,
+.sub-nav-tab:hover {
+  background: var(--logo-yellow);
+  color: #000;
+  border-color: var(--logo-yellow);
+  box-shadow: 0 0 18px rgba(244, 186, 63, 0.4);
+  transform: translateY(-2px);
+}
+
+/* --- Menu Grid & Card Structure --- */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2.5rem;
+}
+
+/* Card Entrance Animation */
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: cardEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.dish-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-dark);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.dish-card:hover {
+  border-color: var(--border-gold);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.8), 0 0 22px rgba(244, 186, 63, 0.25);
+  transform: translateY(-8px);
+}
+
+/* Full Image at Top */
+.dish-img-container {
+  position: relative;
+  width: 100%;
+  height: 230px;
+  overflow: hidden;
+  background: #111;
+}
+
+.dish-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dish-card:hover .dish-img-container img {
+  transform: scale(1.08);
+}
+
+.dish-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  font-family: var(--font-prime);
+  font-size: 0.85rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 4px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  z-index: 2;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.dish-badge.yellow {
+  background: var(--logo-yellow);
+  color: #000;
+}
+
+.dish-badge.red {
+  background: var(--logo-red);
+  color: var(--logo-cream);
+}
+
+.serving-pill {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--border-dark);
+  color: var(--logo-cream);
+  font-size: 0.75rem;
+  font-family: var(--font-prime);
+  letter-spacing: 1px;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  z-index: 2;
+}
+
+/* Info Card Below Image */
+.dish-info-card {
+  padding: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  background: var(--bg-surface);
+}
+
+.dish-category-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--logo-yellow);
+  font-family: var(--font-prime);
+  margin-bottom: 0.3rem;
+  display: block;
+  opacity: 0.85;
+}
+
+.dish-title {
+  font-family: var(--font-prime);
+  font-size: 1.5rem;
+  letter-spacing: 1.5px;
+  margin-bottom: 0.5rem;
+  color: var(--logo-cream);
+}
+
+.dish-desc {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.8rem;
+  flex-grow: 1;
+}
+
+.dish-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.dish-price {
+  font-family: var(--font-prime);
+  font-size: 1.5rem;
+  color: var(--logo-yellow);
+  letter-spacing: 1px;
+}
+
+.add-cart-btn {
+  background: transparent;
+  border: 1px solid var(--logo-yellow);
+  color: var(--logo-yellow);
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-family: var(--font-prime);
+  font-size: 1rem;
+  letter-spacing: 1.2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-cart-btn:hover {
+  background: var(--logo-yellow);
+  color: #000;
+  box-shadow: 0 0 15px rgba(244, 186, 63, 0.4);
+}

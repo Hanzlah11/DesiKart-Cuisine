@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import './Footer.css';
+import './Story.css';
 
-const Footer = () => {
+const Story = () => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -107,68 +107,71 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer id="footer" className="footer-section">
-      <canvas ref={canvasRef} className="footer-bg-canvas" />
+    <section id="story" className="story-section">
+      <canvas ref={canvasRef} className="story-bg-canvas" />
 
-      <div className="footer-content-wrapper">
-        <div className="footer-grid">
-          
-          {/* Col 1: Brand & Bio */}
-          <div className="footer-col brand-col">
-            <div className="footer-brand-group">
-              <img src="/images/brand/desikart-logo.png" alt="Desikart Logo" className="footer-logo" />
-              <span className="footer-brand-text">DESI<span className="text-red">KART</span></span>
-            </div>
-            <p className="footer-bio">
-              Authentic Pakistani food and traditional recipes prepared with care, fresh ingredients, and true home-cooked flavor.
+      <div className="story-content-wrapper">
+        
+        {/* Left Column: Story Text with Palette Highlighting */}
+        <div className="story-text-col">
+          <div className="story-header">
+            <span className="story-tagline">OUR STORY</span>
+            <h2 className="story-title">
+              <span className="text-cream">ROOTED IN TRADITION.</span><br />
+              <span className="text-red">COOKED WITH</span> <span className="text-yellow">HEART.</span>
+            </h2>
+          </div>
+
+          <div className="story-body">
+            <p>
+              <strong className="text-yellow">DesiKart Cuisine</strong> was created with a simple idea — to serve the kind of <span className="text-green">authentic Pakistani food</span> that feels familiar from the very first bite.
             </p>
-            <div className="footer-signature-tag">
-              <span className="text-yellow">Desi Swaad, Dil Se.</span>
+            <p>
+              Our menu celebrates the dishes we grew up loving: slow-cooked <span className="text-red">Nihari</span> and <span className="text-red">Paya</span>, rich <span className="text-yellow">Degi Qorma</span>, comforting <span className="text-cream">Haleem</span>, <span className="text-green">Chinioti Mutton Kunna</span>, traditional <span className="text-yellow">Chicken Achari</span> and smoky <span className="text-red">BBQ favourites</span>. We believe these dishes deserve time, care and respect for the recipes that make them special.
+            </p>
+            <p>
+              We are not trying to reinvent desi food. We want to serve it the way it deserves to be served — <span className="text-green">freshly prepared</span>, full of character and made with ingredients we are comfortable serving to our own families.
+            </p>
+            <p>
+              For us, DesiKart Cuisine is about more than completing an order. It is about building a kitchen people can return to with <span className="text-yellow">confidence</span> — knowing that the same care, flavour and <span className="text-green">honesty</span> will be waiting for them.
+            </p>
+          </div>
+
+          {/* Signature Line */}
+          <div className="story-signature">
+            <span className="signature-text">Desi Swaad, Dil Se.</span>
+          </div>
+        </div>
+
+        {/* Right Column: Cinematic Brand Emblem & Signature Dish */}
+        <div className="story-image-col">
+          <div className="story-glow-backdrop"></div>
+          
+          {/* Cinematic Animated Brand Emblem Badge */}
+          <div className="story-emblem-container">
+            <img 
+              src="/images/brand/desikart-logo.png" 
+              alt="DesiKart Crest Emblem" 
+              className="story-emblem-logo"
+            />
+          </div>
+
+          <div className="story-image-card">
+            <img 
+              src="/images/menu/nalli-beef-nihari.jpeg" 
+              alt="DesiKart Signature Dish - Special Nali Beef Nihari" 
+              className="story-dish-img"
+            />
+            <div className="story-img-badge">
+              <span className="badge-title">SIGNATURE CREATION</span>
+              <span className="badge-subtitle">Slow-Cooked Daily Perfection</span>
             </div>
           </div>
-
-          {/* Col 2: Quick Links */}
-          <div className="footer-col">
-            <h4 className="footer-heading">NAVIGATION</h4>
-            <ul className="footer-links">
-              <li><a href="#hero">Home</a></li>
-              <li><a href="#menu">Our Menu</a></li>
-              <li><a href="#promise">The Promise</a></li>
-              <li><a href="#story">Our Story</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-          </div>
-
-          {/* Col 3: Hours & Operations */}
-          <div className="footer-col">
-            <h4 className="footer-heading">KITCHEN <span className="text-green">HOURS</span></h4>
-            <ul className="footer-info-list">
-              <li><span>Monday – Thursday:</span> <strong className="text-cream">12:00 PM – 11:00 PM</strong></li>
-              <li><span>Friday – Sunday:</span> <strong className="text-yellow">8:00 AM – 12:00 AM</strong></li>
-              <li><span className="text-red">Breakfast Specials:</span> Available Weekends</li>
-            </ul>
-          </div>
-
-          {/* Col 4: Contact & Orders */}
-          <div className="footer-col">
-            <h4 className="footer-heading">CONTACT & <span className="text-red">ORDERS</span></h4>
-            <ul className="footer-info-list">
-              <li><span>Phone / WhatsApp:</span> <strong className="text-cream">+92 (300) 1234567</strong></li>
-              <li><span>Delivery:</span> <strong className="text-yellow">Doorstep & Takeaway</strong></li>
-              <li><span>Inquiries:</span> <strong className="text-cream">support@desikartcuisine.com</strong></li>
-            </ul>
-          </div>
-
         </div>
 
-        {/* Bottom Bar */}
-        <div className="footer-bottom">
-          <p>&copy; {new Date().getFullYear()} DesiKart Cuisine. All rights reserved.</p>
-          <p className="footer-craft">Crafted with tradition, passion, and fire.</p>
-        </div>
       </div>
-    </footer>
+    </section>
   );
 };
 
-export default Footer;
+export default Story;

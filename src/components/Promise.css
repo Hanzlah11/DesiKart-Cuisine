@@ -1,0 +1,127 @@
+.promise-section {
+  position: relative;
+  max-width: 1280px;
+  margin: 6rem auto;
+  padding: 5rem 2rem;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+/* Background Smoke & Ember Canvas */
+.promise-bg-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.promise-content-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.section-title {
+  font-family: var(--font-prime);
+  font-size: 3.8rem;
+  letter-spacing: 2.5px;
+  color: var(--logo-cream);
+  text-transform: uppercase;
+}
+
+.section-subtitle {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--logo-yellow);
+  font-size: 1.2rem;
+  margin-top: 0.4rem;
+}
+
+/* --- Promise Grid --- */
+.promise-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.promise-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-dark);
+  border-radius: 16px;
+  padding: 2.2rem;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+  overflow: hidden;
+}
+
+.promise-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 0;
+  background: var(--logo-yellow);
+  transition: height 0.4s ease;
+}
+
+.promise-card:hover {
+  border-color: var(--border-gold);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(244, 186, 63, 0.2);
+  transform: translateY(-6px);
+}
+
+.promise-card:hover::before {
+  height: 100%;
+}
+
+.promise-icon-wrap {
+  width: 55px;
+  height: 55px;
+  background: rgba(244, 186, 63, 0.1);
+  border: 1px solid rgba(244, 186, 63, 0.3);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.6rem;
+  transition: all 0.3s ease;
+}
+
+.promise-card:hover .promise-icon-wrap {
+  background: var(--logo-yellow);
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 0 15px rgba(244, 186, 63, 0.5);
+}
+
+.promise-card-title {
+  font-family: var(--font-prime);
+  font-size: 1.5rem;
+  letter-spacing: 1.5px;
+  color: var(--logo-cream);
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+}
+
+.promise-card-desc {
+  color: var(--text-muted);
+  font-size: 0.98rem;
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 3rem;
+  }
+}

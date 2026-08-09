@@ -1,6 +1,22 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,500&display=swap');
+
+:root {
+  --bg-canvas: #0A0A0A;
+  --bg-surface: #141416;
+  /* Exact logo-matched tones */
+  --logo-cream: #FFF9E6;
+  --logo-yellow: #F4BA3F;
+  --logo-red: #D23214;
+  --accent-green: #22A352;
+  --text-muted: #B8B8B2;
+  
+  --border-dark: rgba(255, 249, 230, 0.12);
+  --border-gold: rgba(244, 186, 63, 0.4);
+
+  --font-prime: 'Anton', 'Oswald', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+}
 
 * {
   margin: 0;
@@ -13,199 +29,31 @@ html {
 }
 
 body {
-  background-color: #050505;
-  color: #F5E8D0;
-  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-canvas);
+  color: var(--logo-cream);
+  font-family: var(--font-body);
+  line-height: 1.7; /* Balanced, clean spacing */
   overflow-x: hidden;
+  position: relative;
 }
 
-/* Smoke animation */
-@keyframes smokeDrift {
-  0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
-  20% { opacity: 0.15; }
-  80% { opacity: 0.08; }
-  100% { transform: translateY(-120px) translateX(20px) scale(2.5); opacity: 0; }
+/* Typography Color Variants matched to logo */
+.text-cream {
+  color: var(--logo-cream);
 }
 
-@keyframes emberFloat {
-  0% { transform: translateY(0) translateX(0); opacity: 0; }
-  20% { opacity: 1; }
-  100% { transform: translateY(-200px) translateX(40px); opacity: 0; }
+.text-yellow {
+  color: var(--logo-yellow);
+  text-shadow: 0 0 15px rgba(244, 186, 63, 0.35);
 }
 
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+.text-red {
+  color: var(--logo-red);
+  text-shadow: 0 0 15px rgba(210, 50, 20, 0.35);
 }
 
-@keyframes fadeInLeft {
-  from { opacity: 0; transform: translateX(-40px); }
-  to { opacity: 1; transform: translateX(0); }
+.text-green {
+  color: var(--accent-green);
+  text-shadow: 0 0 15px rgba(34, 163, 82, 0.35);
 }
 
-@keyframes fadeInRight {
-  from { opacity: 0; transform: translateX(40px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes glowPulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(228, 87, 30, 0.4); }
-  50% { box-shadow: 0 0 40px rgba(228, 87, 30, 0.8), 0 0 80px rgba(228, 87, 30, 0.3); }
-}
-
-@keyframes goldShimmer {
-  0%, 100% { box-shadow: 0 0 15px rgba(212, 162, 76, 0.3); }
-  50% { box-shadow: 0 0 30px rgba(212, 162, 76, 0.6); }
-}
-
-.smoke-particle {
-  position: absolute;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(200,200,200,0.2) 0%, transparent 70%);
-  animation: smokeDrift linear infinite;
-  pointer-events: none;
-}
-
-.ember-particle {
-  position: absolute;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: #E4571E;
-  animation: emberFloat linear infinite;
-  pointer-events: none;
-}
-
-.fade-in-up {
-  animation: fadeInUp 0.8s ease forwards;
-}
-
-.fade-in-left {
-  animation: fadeInLeft 0.8s ease forwards;
-}
-
-.fade-in-right {
-  animation: fadeInRight 0.8s ease forwards;
-}
-
-.glow-btn {
-  animation: glowPulse 2s ease-in-out infinite;
-}
-
-.gold-glow {
-  animation: goldShimmer 2s ease-in-out infinite;
-}
-
-/* Gold border utility */
-.gold-border {
-  border: 1px solid rgba(212, 162, 76, 0.4);
-}
-
-.gold-border-strong {
-  border: 1px solid #D4A24C;
-}
-
-/* Section divider */
-.gold-divider {
-  width: 80px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #D4A24C, transparent);
-  margin: 0 auto;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #050505; }
-::-webkit-scrollbar-thumb { background: #D4A24C; border-radius: 3px; }
-
-/* Floating WhatsApp */
-.whatsapp-float {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 1000;
-  width: 56px;
-  height: 56px;
-  background: #25D366;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.whatsapp-float:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 30px rgba(37, 211, 102, 0.7);
-}
-
-/* Sticky order button mobile */
-.sticky-order {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
-  padding: 12px 16px;
-  background: linear-gradient(to top, #050505, transparent);
-}
-
-/* Card hover effects */
-.specialty-card {
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-}
-
-.specialty-card:hover {
-  transform: translateY(-8px);
-}
-
-.specialty-card:hover .card-img {
-  transform: scale(1.08);
-}
-
-.card-img {
-  transition: transform 0.4s ease;
-}
-
-/* Menu tab active */
-.tab-active {
-  border-bottom: 2px solid #D4A24C;
-  color: #D4A24C;
-}
-
-/* Intersection observer hidden state */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.reveal-left {
-  opacity: 0;
-  transform: translateX(-40px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-
-.reveal-left.visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.reveal-right {
-  opacity: 0;
-  transform: translateX(40px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-
-.reveal-right.visible {
-  opacity: 1;
-  transform: translateX(0);
-}

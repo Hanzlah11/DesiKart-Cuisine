@@ -1,0 +1,228 @@
+.contact-section {
+  position: relative;
+  max-width: 1280px;
+  margin: 6rem auto;
+  padding: 5rem 2rem;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.contact-content-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.section-title {
+  font-family: var(--font-prime);
+  font-size: 3.8rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+}
+
+.section-subtitle {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--logo-yellow);
+  font-size: 1.2rem;
+  margin-top: 0.4rem;
+}
+
+/* --- Contact Grid --- */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 3rem;
+  align-items: stretch;
+}
+
+/* Info Card */
+.contact-info-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-dark);
+  border-radius: 20px;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6);
+}
+
+.info-title {
+  font-family: var(--font-prime);
+  font-size: 2rem;
+  letter-spacing: 1.5px;
+  color: var(--logo-cream);
+  margin-bottom: 1rem;
+}
+
+.info-desc {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.info-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+}
+
+.info-icon {
+  font-size: 1.5rem;
+  background: rgba(244, 186, 63, 0.1);
+  padding: 0.6rem;
+  border-radius: 12px;
+  border: 1px solid rgba(244, 186, 63, 0.2);
+}
+
+.info-label {
+  display: block;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 0.2rem;
+}
+
+.contact-signature {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-dark);
+}
+
+/* Form Card */
+.contact-form-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-dark);
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6);
+}
+
+.form-title {
+  font-family: var(--font-prime);
+  font-size: 2rem;
+  letter-spacing: 1.5px;
+  color: var(--logo-cream);
+  margin-bottom: 1.8rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-family: var(--font-prime);
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  color: var(--logo-cream);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: rgba(10, 10, 10, 0.6);
+  border: 1px solid var(--border-dark);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  color: var(--logo-cream);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--logo-yellow);
+  box-shadow: 0 0 12px rgba(244, 186, 63, 0.3);
+}
+
+.submit-btn {
+  margin-top: 1rem;
+  background: var(--logo-red);
+  color: var(--logo-cream);
+  border: none;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: var(--font-prime);
+  font-size: 1.15rem;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(210, 50, 20, 0.4);
+}
+
+.submit-btn:hover {
+  background: var(--logo-yellow);
+  color: #000;
+  box-shadow: 0 0 20px rgba(244, 186, 63, 0.5);
+  transform: translateY(-2px);
+}
+
+.form-success-message {
+  text-align: center;
+  padding: 4rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  align-items: center;
+}
+
+.form-success-message h3 {
+  font-family: var(--font-prime);
+  font-size: 2.2rem;
+  letter-spacing: 1.5px;
+}
+
+.form-success-message p {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+}
+
+.btn-reset {
+  background: transparent;
+  border: 1px solid var(--logo-yellow);
+  color: var(--logo-yellow);
+  padding: 0.7rem 1.5rem;
+  border-radius: 6px;
+  font-family: var(--font-prime);
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-reset:hover {
+  background: var(--logo-yellow);
+  color: #000;
+}
+
+@media (max-width: 960px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+}

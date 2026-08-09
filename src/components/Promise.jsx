@@ -1,7 +1,52 @@
 import React, { useEffect, useRef } from 'react';
-import './Footer.css';
+import './Promise.css';
 
-const Footer = () => {
+const promiseData = [
+  {
+    id: 1,
+    title: "Halal Ingredients",
+    desc: "Carefully sourced ingredients you can trust, meeting strict quality and faith standards.",
+    icon: "🥩",
+    badgeColor: "green"
+  },
+  {
+    id: 2,
+    title: "Authentic Recipes",
+    desc: "Traditional culinary heritage passed down through generations, bringing true home-cooked taste.",
+    icon: "📜",
+    badgeColor: "yellow"
+  },
+  {
+    id: 3,
+    title: "Freshly Cooked",
+    desc: "Prepared fresh upon order, straight from our fiery handi and grill to your table.",
+    icon: "🔥",
+    badgeColor: "red"
+  },
+  {
+    id: 4,
+    title: "Hygienic Preparation",
+    desc: "Strict kitchen sanitization and clean handling protocols for your ultimate peace of mind.",
+    icon: "✨",
+    badgeColor: "green"
+  },
+  {
+    id: 5,
+    title: "Honest Value",
+    desc: "Generous portions packed with rich flavors, offering premium quality at fair prices.",
+    icon: "⚖️",
+    badgeColor: "yellow"
+  },
+  {
+    id: 6,
+    title: "Trust Before Profit",
+    desc: "We value long-term customer trust above short-term gain in every single meal we serve.",
+    icon: "🤝",
+    badgeColor: "red"
+  }
+];
+
+const Promise = () => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -88,7 +133,7 @@ const Footer = () => {
     }
 
     const smokeParticles = Array.from({ length: 15 }, () => new SmokeParticle());
-    const emberParticles = Array.from({ length: 30 }, () => new EmberParticle());
+    const emberParticles = Array.from({ length: 35 }, () => new EmberParticle());
 
     let animationFrameId;
     const animate = () => {
@@ -107,68 +152,35 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer id="footer" className="footer-section">
-      <canvas ref={canvasRef} className="footer-bg-canvas" />
+    <section id="promise" className="promise-section">
+      <canvas ref={canvasRef} className="promise-bg-canvas" />
 
-      <div className="footer-content-wrapper">
-        <div className="footer-grid">
-          
-          {/* Col 1: Brand & Bio */}
-          <div className="footer-col brand-col">
-            <div className="footer-brand-group">
-              <img src="/images/brand/desikart-logo.png" alt="Desikart Logo" className="footer-logo" />
-              <span className="footer-brand-text">DESI<span className="text-red">KART</span></span>
-            </div>
-            <p className="footer-bio">
-              Authentic Pakistani food and traditional recipes prepared with care, fresh ingredients, and true home-cooked flavor.
-            </p>
-            <div className="footer-signature-tag">
-              <span className="text-yellow">Desi Swaad, Dil Se.</span>
-            </div>
-          </div>
-
-          {/* Col 2: Quick Links */}
-          <div className="footer-col">
-            <h4 className="footer-heading">NAVIGATION</h4>
-            <ul className="footer-links">
-              <li><a href="#hero">Home</a></li>
-              <li><a href="#menu">Our Menu</a></li>
-              <li><a href="#promise">The Promise</a></li>
-              <li><a href="#story">Our Story</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-          </div>
-
-          {/* Col 3: Hours & Operations */}
-          <div className="footer-col">
-            <h4 className="footer-heading">KITCHEN <span className="text-green">HOURS</span></h4>
-            <ul className="footer-info-list">
-              <li><span>Monday – Thursday:</span> <strong className="text-cream">12:00 PM – 11:00 PM</strong></li>
-              <li><span>Friday – Sunday:</span> <strong className="text-yellow">8:00 AM – 12:00 AM</strong></li>
-              <li><span className="text-red">Breakfast Specials:</span> Available Weekends</li>
-            </ul>
-          </div>
-
-          {/* Col 4: Contact & Orders */}
-          <div className="footer-col">
-            <h4 className="footer-heading">CONTACT & <span className="text-red">ORDERS</span></h4>
-            <ul className="footer-info-list">
-              <li><span>Phone / WhatsApp:</span> <strong className="text-cream">+92 (300) 1234567</strong></li>
-              <li><span>Delivery:</span> <strong className="text-yellow">Doorstep & Takeaway</strong></li>
-              <li><span>Inquiries:</span> <strong className="text-cream">support@desikartcuisine.com</strong></li>
-            </ul>
-          </div>
-
+      <div className="promise-content-wrapper">
+        <div className="section-header">
+          <h2 className="section-title">
+            <span className="text-cream">THE</span> <span className="text-red">DESIKART</span> <span className="text-green">PROMISE</span>
+          </h2>
+          <p className="section-subtitle">Our commitment to quality, authenticity, and your satisfaction</p>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="footer-bottom">
-          <p>&copy; {new Date().getFullYear()} DesiKart Cuisine. All rights reserved.</p>
-          <p className="footer-craft">Crafted with tradition, passion, and fire.</p>
+        <div className="promise-grid">
+          {promiseData.map((item, index) => (
+            <div 
+              key={item.id} 
+              className={`promise-card card-${item.badgeColor}`}
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <div className={`promise-icon-wrap icon-${item.badgeColor}`}>
+                <span className="promise-icon">{item.icon}</span>
+              </div>
+              <h3 className="promise-card-title">{item.title}</h3>
+              <p className="promise-card-desc">{item.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
-    </footer>
+    </section>
   );
 };
 
-export default Footer;
+export default Promise;
