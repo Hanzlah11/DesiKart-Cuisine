@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
 import EmailAuthModal from './components/EmailAuthModal';
 import UserProfileModal from './components/UserProfileModal';
+import AiAssistant from './components/AiAssistant';
 import { auth, db, doc, getDoc, onAuthStateChanged, signOut } from './firebase';
 
 function App() {
@@ -161,6 +162,11 @@ function App() {
         currentUser={currentUser}
         userData={userData}
         onProfileUpdated={(updated) => setUserData(updated)}
+      />
+
+      <AiAssistant 
+        onOpenCart={() => setIsCartOpen(true)}
+        onOpenAuth={() => setIsAuthModalOpen(true)}
       />
     </div>
   );
