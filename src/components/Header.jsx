@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './Header.css';
 
-const Header = ({ cartCount = 0 }) => {
+const Header = ({ cartCount = 0, onCartClick, currentUser, userData, onOpenAuth, onOpenProfile, onSignOut }) => {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,7 +60,39 @@ const Header = ({ cartCount = 0 }) => {
 
         {/* Action Controls */}
         <div className="nav-actions">
-          <button className="cart-btn" aria-label="Shopping Cart">
+          {/* User Auth / Profile Section */}
+          {currentUser ? (
+            <div className="user-menu-container" style={{ position: 'relative' }}>
+              <button 
+                className="user-profile-trigger" 
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                title="Account Settings"
+              >
+                <span>👤 {userData?.name ? userData.name.split(' ')[0] : 'Account'}</span>
+              </button>
+
+              {dropdownOpen && (
+                <div className="user-dropdown-menu">
+                  <div className="dropdown-user-info">
+                    <strong>{userData?.name || 'User'}</strong>
+                    <small>{currentUser.email}</small>
+                  </div>
+                  <button onClick={() => { setDropdownOpen(false); onOpenProfile(); }}>
+                    ⚙️ Edit Profile
+                  </button>
+                  <button onClick={() => { setDropdownOpen(false); onSignOut(); }} className="dropdown-signout">
+                    🚪 Sign Out
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button className="nav-login-btn" onClick={onOpenAuth}>
+              LOGIN / SIGNUP
+            </button>
+          )}
+
+          <button className="cart-btn" aria-label="Shopping Cart" onClick={onCartClick}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"></path>
               <line x1="3" y1="6" x2="21" y2="6"></line>

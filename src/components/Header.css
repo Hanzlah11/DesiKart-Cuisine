@@ -169,3 +169,114 @@
     display: none; /* Can be paired with a mobile hamburger menu later */
   }
 }
+
+/* --- Add these styles to your existing Header.css --- */
+
+.nav-login-btn {
+  background: transparent;
+  border: 1px solid var(--border-gold);
+  color: var(--logo-cream);
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-family: var(--font-prime);
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-login-btn:hover {
+  background: var(--logo-yellow);
+  color: #000;
+  border-color: var(--logo-yellow);
+  box-shadow: 0 0 15px rgba(244, 186, 63, 0.4);
+}
+
+.user-profile-trigger {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-gold);
+  color: var(--logo-cream);
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  font-family: var(--font-prime);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.3s ease;
+}
+
+.user-profile-trigger:hover {
+  border-color: var(--logo-yellow);
+  box-shadow: 0 0 12px rgba(244, 186, 63, 0.3);
+}
+
+.user-dropdown-menu {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: #121212;
+  border: 1px solid var(--border-gold);
+  border-radius: 10px;
+  width: 200px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1100;
+  animation: fadeInDown 0.2s ease;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-user-info {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-user-info strong {
+  color: var(--logo-cream);
+  font-family: var(--font-prime);
+  font-size: 0.9rem;
+}
+
+.dropdown-user-info small {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-dropdown-menu button {
+  background: transparent;
+  border: none;
+  color: var(--logo-cream);
+  padding: 0.8rem 1rem;
+  text-align: left;
+  font-family: var(--font-prime);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.user-dropdown-menu button:hover {
+  background: rgba(244, 186, 63, 0.1);
+  color: var(--logo-yellow);
+}
+
+.dropdown-signout {
+  color: var(--logo-red) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dropdown-signout:hover {
+  background: rgba(210, 50, 20, 0.15) !important;
+}

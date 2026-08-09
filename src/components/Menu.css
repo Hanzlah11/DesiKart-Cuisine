@@ -215,10 +215,12 @@
   opacity: 0.85;
 }
 
+/* Dedicated Clear Font for Food Names Inside Cards */
 .dish-title {
-  font-family: var(--font-prime);
-  font-size: 1.5rem;
-  letter-spacing: 1.5px;
+  font-family: 'Cinzel', 'Trajan Pro', 'Georgia', serif;
+  font-weight: 700;
+  font-size: 1.45rem;
+  letter-spacing: 1px;
   margin-bottom: 0.5rem;
   color: var(--logo-cream);
 }
