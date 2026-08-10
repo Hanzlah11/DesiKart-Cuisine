@@ -134,7 +134,11 @@ function App() {
         <Menu onAddToCart={handleAddToCart} />
         <Promise />
         <Story />
-        <Contact />
+        <Contact 
+          currentUser={currentUser}
+          userData={userData}
+          onOpenAuth={() => setIsAuthModalOpen(true)}
+        />
       </main>
 
       <Footer />

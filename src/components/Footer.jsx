@@ -143,8 +143,8 @@ const Footer = () => {
           <div className="footer-col">
             <h4 className="footer-heading">KITCHEN <span className="text-green">HOURS</span></h4>
             <ul className="footer-info-list">
-              <li><span>Monday – Thursday:</span> <strong className="text-cream">12:00 PM – 11:00 PM</strong></li>
-              <li><span>Friday – Sunday:</span> <strong className="text-yellow">8:00 AM – 12:00 AM</strong></li>
+              <li><span>Monday – Thursday:</span> <strong className="text-cream">08:00 AM – 10:00 PM</strong></li>
+              <li><span>Friday – Saturday:</span> <strong className="text-yellow">08:00 AM – 11:00 PM</strong></li>
               <li><span className="text-red">Breakfast Specials:</span> Available Weekends</li>
             </ul>
           </div>
@@ -153,9 +153,9 @@ const Footer = () => {
           <div className="footer-col">
             <h4 className="footer-heading">CONTACT & <span className="text-red">ORDERS</span></h4>
             <ul className="footer-info-list">
-              <li><span>Phone / WhatsApp:</span> <strong className="text-cream">+92 (300) 1234567</strong></li>
+              <li><span>Phone / WhatsApp:</span> <strong className="text-cream">+92 331 6667054</strong></li>
               <li><span>Delivery:</span> <strong className="text-yellow">Doorstep & Takeaway</strong></li>
-              <li><span>Inquiries:</span> <strong className="text-cream">support@desikartcuisine.com</strong></li>
+              <li><span>Inquiries:</span> <strong className="text-cream">info@desikartcuisine.com</strong></li>
             </ul>
           </div>
 

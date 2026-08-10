@@ -1,22 +1,53 @@
 import React, { useState } from 'react';
+import { db } from '../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import './Contact.css';
 
-const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    serviceType: 'Takeaway Order',
-    message: ''
-  });
+const Contact = ({ currentUser, userData, onOpenAuth }) => {
+  const [serviceType, setServiceType] = useState('Takeaway Order');
+  const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    setErrorMsg('');
+
+    // If user is not logged in, block submission and prompt for auth
+    if (!currentUser || !userData) {
+      setErrorMsg('Please sign in or register to send an inquiry.');
+      onOpenAuth();
+      return;
+    }
+
+    if (!message.trim()) {
+      setErrorMsg('Please enter your message.');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Save the inquiry directly to Firestore
+      await addDoc(collection(db, "inquiries"), {
+        userId: currentUser.uid,
+        name: userData.name || 'Anonymous',
+        phone: userData.phone || 'Not Provided',
+        email: currentUser.email || 'No Email',
+        serviceType: serviceType,
+        message: message.trim(),
+        createdAt: serverTimestamp(),
+        status: 'Unread'
+      });
+
+      setLoading(false);
+      setSubmitted(true);
+    } catch (err) {
+      setLoading(false);
+      setErrorMsg('Failed to send message. Please try again later.');
+      console.error("Error saving inquiry:", err);
+    }
   };
 
   return (
@@ -43,7 +74,7 @@ const Contact = () => {
                 <span className="info-icon">📞</span>
                 <div>
                   <span className="info-label">Phone & WhatsApp</span>
-                  <strong className="text-cream">+92 (300) 1234567</strong>
+                  <strong className="text-cream">+92 0331 6667054</strong>
                 </div>
               </div>
 
@@ -51,7 +82,7 @@ const Contact = () => {
                 <span className="info-icon">✉️</span>
                 <div>
                   <span className="info-label">Email Support</span>
-                  <strong className="text-yellow">support@desikartcuisine.com</strong>
+                  <strong className="text-yellow">info@desikartcuisine.com</strong>
                 </div>
               </div>
 
@@ -59,7 +90,10 @@ const Contact = () => {
                 <span className="info-icon">🕒</span>
                 <div>
                   <span className="info-label">Kitchen Timings</span>
-                  <strong className="text-green">Mon–Thu: 12 PM - 11 PM | Fri–Sun: 8 AM - 12 AM</strong>
+                  <strong className="text-green" style={{ display: 'block', lineHeight: '1.4' }}>
+                    Mon–Thu: 8 AM - 10 PM<br />
+                    Fri–Sat: Open until 11 PM
+                  </strong>
                 </div>
               </div>
             </div>
@@ -73,11 +107,11 @@ const Contact = () => {
           <div className="contact-form-card">
             {submitted ? (
               <div className="form-success-message">
-                <h3 className="text-green">MESSAGE RECEIVED!</h3>
-                <p>Thank you for reaching out. Our team will get back to you shortly.</p>
+                <h3 className="text-green">MESSAGE SAVED!</h3>
+                <p>Thank you for reaching out, {userData?.name}. Your message has been saved and our team will get back to you shortly.</p>
                 <button 
                   className="btn-reset" 
-                  onClick={() => { setSubmitted(false); setFormData({ name: '', phone: '', serviceType: 'Takeaway Order', message: '' }); }}
+                  onClick={() => { setSubmitted(false); setMessage(''); }}
                 >
                   Send Another Message
                 </button>
@@ -86,39 +120,29 @@ const Contact = () => {
               <form onSubmit={handleSubmit} className="contact-form">
                 <h3 className="form-title">SEND US A <span className="text-yellow">MESSAGE</span></h3>
                 
-                <div className="form-group">
-                  <label htmlFor="name">Your Name</label>
-                  <input 
-                    type="text" 
-                    id="name" 
-                    name="name" 
-                    value={formData.name} 
-                    onChange={handleChange} 
-                    required 
-                    placeholder="e.g. Mohib Sardar" 
-                  />
-                </div>
+                {errorMsg && (
+                  <p style={{ background: 'rgba(210, 50, 20, 0.15)', border: '1px solid #D23214', color: '#D23214', padding: '0.6rem', borderRadius: '4px', fontSize: '0.85rem' }}>
+                    {errorMsg}
+                  </p>
+                )}
 
-                <div className="form-group">
-                  <label htmlFor="phone">Phone Number</label>
-                  <input 
-                    type="tel" 
-                    id="phone" 
-                    name="phone" 
-                    value={formData.phone} 
-                    onChange={handleChange} 
-                    required 
-                    placeholder="e.g. +92 300 0000000" 
-                  />
-                </div>
+                {currentUser && userData ? (
+                  <div style={{ background: 'rgba(50, 210, 20, 0.08)', border: '1px solid rgba(50, 210, 20, 0.2)', padding: '0.8rem', borderRadius: '6px', fontSize: '0.85rem', color: '#32D214' }}>
+                    ✅ Sending as <strong>{userData.name}</strong> ({userData.phone})
+                  </div>
+                ) : (
+                  <div style={{ background: 'rgba(244, 186, 63, 0.08)', border: '1px solid rgba(244, 186, 63, 0.2)', padding: '0.8rem', borderRadius: '6px', fontSize: '0.85rem', color: 'var(--logo-yellow)' }}>
+                    🔒 Please <button type="button" onClick={onOpenAuth} style={{ background: 'none', border: 'none', color: 'var(--logo-yellow)', textDecoration: 'underline', cursor: 'pointer', font: 'inherit', padding: 0 }}>sign in or register</button> to send a message.
+                  </div>
+                )}
 
                 <div className="form-group">
                   <label htmlFor="serviceType">Inquiry Type</label>
                   <select 
                     id="serviceType" 
                     name="serviceType" 
-                    value={formData.serviceType} 
-                    onChange={handleChange}
+                    value={serviceType} 
+                    onChange={(e) => setServiceType(e.target.value)}
                   >
                     <option value="Takeaway Order">Takeaway Order</option>
                     <option value="Family Deal Inquiry">Family Deal Inquiry</option>
@@ -133,15 +157,15 @@ const Contact = () => {
                     id="message" 
                     name="message" 
                     rows="4" 
-                    value={formData.message} 
-                    onChange={handleChange} 
+                    value={message} 
+                    onChange={(e) => setMessage(e.target.value)} 
                     required 
                     placeholder="Type your message or special order requests here..."
                   ></textarea>
                 </div>
 
-                <button type="submit" className="submit-btn">
-                  SUBMIT MESSAGE
+                <button type="submit" className="submit-btn" disabled={loading}>
+                  {loading ? 'SAVING MESSAGE...' : 'SUBMIT MESSAGE'}
                 </button>
               </form>
             )}
