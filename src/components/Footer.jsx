@@ -164,7 +164,7 @@ const Footer = () => {
                   className="text-cream"
                   style={{ textDecoration: 'none' }}
                 >
-                  desikartcuisine@gmail.com
+                  info@desikartcuisine.com
                 </a>
               </li>
             </ul>

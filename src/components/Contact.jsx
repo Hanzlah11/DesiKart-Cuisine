@@ -89,7 +89,7 @@ const Contact = ({ currentUser, userData, onOpenAuth }) => {
                     className="text-yellow" 
                     style={{ textDecoration: 'none', display: 'inline-block' }}
                   >
-                    desikartcuisine@gmail.com
+                    info@desikartcuisine.com
                   </a>
                 </div>
               </div>
