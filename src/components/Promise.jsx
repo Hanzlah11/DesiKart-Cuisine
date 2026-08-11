@@ -6,43 +6,43 @@ const promiseData = [
     id: 1,
     title: "Halal Ingredients",
     desc: "Carefully sourced ingredients you can trust, meeting strict quality and faith standards.",
-    icon: "🥩",
-    badgeColor: "green"
+    badgeColor: "green",
+    imgSrc: "/images/promises/halal.png"
   },
   {
     id: 2,
     title: "Authentic Recipes",
     desc: "Traditional culinary heritage passed down through generations, bringing true home-cooked taste.",
-    icon: "📜",
-    badgeColor: "yellow"
+    badgeColor: "yellow",
+    imgSrc: "/images/promises/recipe.png"
   },
   {
     id: 3,
     title: "Freshly Cooked",
     desc: "Prepared fresh upon order, straight from our fiery handi and grill to your table.",
-    icon: "🔥",
-    badgeColor: "red"
+    badgeColor: "red",
+    imgSrc: "/images/promises/fresh.png"
   },
   {
     id: 4,
     title: "Hygienic Preparation",
     desc: "Strict kitchen sanitization and clean handling protocols for your ultimate peace of mind.",
-    icon: "✨",
-    badgeColor: "green"
+    badgeColor: "green",
+    imgSrc: "/images/promises/hygiene.png"
   },
   {
     id: 5,
     title: "Honest Value",
     desc: "Generous portions packed with rich flavors, offering premium quality at fair prices.",
-    icon: "⚖️",
-    badgeColor: "yellow"
+    badgeColor: "yellow",
+    imgSrc: "/images/promises/value.png"
   },
   {
     id: 6,
     title: "Trust Before Profit",
     desc: "We value long-term customer trust above short-term gain in every single meal we serve.",
-    icon: "🤝",
-    badgeColor: "red"
+    badgeColor: "red",
+    imgSrc: "/images/promises/trust.png"
   }
 ];
 
@@ -171,7 +171,7 @@ const Promise = () => {
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className={`promise-icon-wrap icon-${item.badgeColor}`}>
-                <span className="promise-icon">{item.icon}</span>
+                <img src={item.imgSrc} alt={item.title} style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
               </div>
               <h3 className="promise-card-title">{item.title}</h3>
               <p className="promise-card-desc">{item.desc}</p>

@@ -145,7 +145,6 @@ const Footer = () => {
             <ul className="footer-info-list">
               <li><span>Monday – Thursday:</span> <strong className="text-cream">08:00 AM – 10:00 PM</strong></li>
               <li><span>Friday – Saturday:</span> <strong className="text-yellow">08:00 AM – 11:00 PM</strong></li>
-              <li><span className="text-red">Breakfast Specials:</span> Available Weekends</li>
             </ul>
           </div>
 
