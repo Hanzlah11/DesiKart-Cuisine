@@ -277,39 +277,96 @@
   background: rgba(210, 50, 20, 0.15) !important;
 }
 
-/* --- Responsive Mobile Optimizations --- */
-@media (max-width: 1024px) {
+/* --- Mobile Hamburger Toggle & Dropdown Styles --- */
+.mobile-menu-toggle {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-gold);
+  color: var(--logo-cream);
+  font-size: 1.3rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle:hover {
+  background: var(--logo-yellow);
+  color: #000;
+}
+
+.mobile-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: rgba(12, 12, 12, 0.96);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-gold);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9);
+  flex-direction: column;
+  padding: 1rem 0;
+  z-index: 999;
+  animation: fadeInDown 0.3s ease;
+}
+
+.mobile-nav-link {
+  padding: 0.9rem 2rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-family: var(--font-prime);
+  font-size: 1.05rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
+  color: var(--logo-cream);
+  background: rgba(244, 186, 63, 0.08);
+  border-left-color: var(--logo-yellow);
+}
+
+/* --- Responsive Media Queries --- */
+@media (max-width: 960px) {
   .nav-links {
-    display: none; /* Hide center link items to save space on tablets and phones */
+    display: none; /* Hide desktop links */
+  }
+
+  .desktop-order-btn {
+    display: none !important; /* Hide order button on mobile/tablets */
+  }
+
+  .mobile-menu-toggle {
+    display: flex; /* Show hamburger toggle */
+  }
+
+  .mobile-dropdown-menu {
+    display: flex; /* Show mobile dropdown drawer */
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 550px) {
   .nav-container {
-    padding: 0 1rem; /* Reduce side padding so buttons have extra room */
-  }
-  
-  .brand-text {
-    font-size: 1.2rem; /* Make brand title slightly more compact */
-    letter-spacing: 1px;
-  }
-
-  .nav-logo {
-    height: 34px;
-  }
-
-  .nav-actions {
-    gap: 0.6rem; /* Tighter gap between cart, login, and order buttons */
-  }
-
-  .nav-order-btn {
-    padding: 0.5rem 0.9rem;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
+    padding: 0 1rem;
   }
 
   .nav-login-btn, .user-profile-trigger {
-    padding: 0.5rem 0.6rem;
-    font-size: 0.75rem;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  .brand-text {
+    font-size: 1.1rem;
+  }
+
+  .nav-logo {
+    height: 32px;
   }
 }

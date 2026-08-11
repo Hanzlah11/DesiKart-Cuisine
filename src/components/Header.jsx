@@ -5,6 +5,7 @@ const Header = ({ cartCount = 0, onCartClick, currentUser, userData, onOpenAuth,
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,7 +37,12 @@ const Header = ({ cartCount = 0, onCartClick, currentUser, userData, onOpenAuth,
 
   const handleLogoClick = (e) => {
     e.preventDefault();
+    setMobileMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleNavLinkClick = () => {
+    setMobileMenuOpen(false);
   };
 
   return (
@@ -49,7 +55,7 @@ const Header = ({ cartCount = 0, onCartClick, currentUser, userData, onOpenAuth,
           <span className="brand-text">DESI<span className="text-red">KART</span></span>
         </a>
 
-        {/* Cinematic Navigation Links */}
+        {/* Desktop Navigation Links */}
         <nav className="nav-links">
           <a href="#hero" className={`nav-link ${activeSection === 'hero' ? 'active' : ''}`}><span>Home</span></a>
           <a href="#menu" className={`nav-link ${activeSection === 'menu' ? 'active' : ''}`}><span>Menu</span></a>
@@ -101,12 +107,33 @@ const Header = ({ cartCount = 0, onCartClick, currentUser, userData, onOpenAuth,
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
           </button>
 
-          <a href="#menu" className="nav-order-btn">
+          {/* ORDER NOW button - Desktop Only */}
+          <a href="#menu" className="nav-order-btn desktop-order-btn">
             ORDER NOW
           </a>
+
+          {/* Hamburger Menu Toggle Button - Mobile Only */}
+          <button 
+            className="mobile-menu-toggle" 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle Mobile Menu"
+          >
+            {mobileMenuOpen ? '✕' : '☰'}
+          </button>
         </div>
 
       </div>
+
+      {/* Collapsible Mobile Dropdown Drawer */}
+      {mobileMenuOpen && (
+        <div className="mobile-dropdown-menu">
+          <a href="#hero" onClick={handleNavLinkClick} className={`mobile-nav-link ${activeSection === 'hero' ? 'active' : ''}`}>Home</a>
+          <a href="#menu" onClick={handleNavLinkClick} className={`mobile-nav-link ${activeSection === 'menu' ? 'active' : ''}`}>Menu</a>
+          <a href="#promise" onClick={handleNavLinkClick} className={`mobile-nav-link ${activeSection === 'promise' ? 'active' : ''}`}>Promise</a>
+          <a href="#story" onClick={handleNavLinkClick} className={`mobile-nav-link ${activeSection === 'story' ? 'active' : ''}`}>Story</a>
+          <a href="#contact" onClick={handleNavLinkClick} className={`mobile-nav-link ${activeSection === 'contact' ? 'active' : ''}`}>Contact</a>
+        </div>
+      )}
     </header>
   );
 };
