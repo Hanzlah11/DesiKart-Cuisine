@@ -120,10 +120,10 @@ const Footer = () => {
               <span className="footer-brand-text">DESI<span className="text-red">KART</span></span>
             </div>
             <p className="footer-bio">
-              Authentic Pakistani food and traditional recipes prepared with care, fresh ingredients, and true home-cooked flavor.
+              Authentic Pakistani food and traditional recipes prepared with care, fresh ingredients, and true home-cooked flavor.[cite: 10]
             </p>
             <div className="footer-signature-tag">
-              <span className="text-yellow">Desi Swaad, Dil Se.</span>
+              <span className="text-yellow">Desi Swaad, Dil Se.</span>[cite: 10]
             </div>
           </div>
 
@@ -156,8 +156,14 @@ const Footer = () => {
               <li><span>Phone / WhatsApp:</span> <strong className="text-cream">+92 311 50 77779</strong></li>
               <li><span>Delivery:</span> <strong className="text-yellow">Doorstep & Takeaway</strong></li>
               <li>
-                <span>Inquiries:</span> 
-                <a href="mailto:desikartcuisine@gmail.com" className="text-cream" style={{ textDecoration: 'none' }}>
+                <span>Inquiries:</span>{' '}
+                <a 
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=desikartcuisine@gmail.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-cream"
+                  style={{ textDecoration: 'none' }}
+                >
                   desikartcuisine@gmail.com
                 </a>
               </li>
@@ -169,7 +175,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="footer-bottom">
           <p>&copy; {new Date().getFullYear()} DesiKart Cuisine. All rights reserved.</p>
-          <p className="footer-craft">Crafted with tradition, passion, and fire.</p>
+          <p className="footer-craft">Crafted with tradition, passion, and fire.[cite: 10]</p>
         </div>
       </div>
     </footer>

@@ -83,11 +83,13 @@ const Contact = ({ currentUser, userData, onOpenAuth }) => {
                 <div>
                   <span className="info-label">Email Support</span>
                   <a 
-                    href="mailto:desikartcuisine@gmail.com" 
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=desikartcuisine@gmail.com" 
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="text-yellow" 
                     style={{ textDecoration: 'none', display: 'inline-block' }}
                   >
-                    desikartcuisine.com
+                    desikartcuisine@gmail.com
                   </a>
                 </div>
               </div>
