@@ -85,24 +85,70 @@
   height: 100%;
 }
 
+/* --- Double Icon Size & Wrapper --- */
 .promise-icon-wrap {
-  width: 55px;
-  height: 55px;
-  background: rgba(244, 186, 63, 0.1);
-  border: 1px solid rgba(244, 186, 63, 0.3);
-  border-radius: 12px;
+  width: 80px;
+  height: 80px;
+  background: rgba(244, 186, 63, 0.08);
+  border: 1px solid rgba(244, 186, 63, 0.25);
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
-  font-size: 1.6rem;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
 }
 
 .promise-card:hover .promise-icon-wrap {
-  background: var(--logo-yellow);
-  transform: scale(1.1) rotate(5deg);
-  box-shadow: 0 0 15px rgba(244, 186, 63, 0.5);
+  background: rgba(244, 186, 63, 0.15);
+  border-color: var(--logo-yellow);
+  box-shadow: 0 0 15px rgba(244, 186, 63, 0.4);
+}
+
+/* Doubled image size inside the wrapper */
+.promise-icon-wrap img {
+  width: 56px !important;
+  height: 56px !important;
+  object-fit: contain;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --- Unique Icon Animations on Card Hover --- */
+
+/* 1. Halal Ingredients: Gentle Pulse */
+.promise-card:nth-child(1):hover .promise-icon-wrap img {
+  transform: scale(1.15);
+  animation: pulseIcon 1.2s infinite alternate;
+}
+
+/* 2. Authentic Recipes: Subtle Tilt */
+.promise-card:nth-child(2):hover .promise-icon-wrap img {
+  transform: scale(1.15) rotate(-8deg);
+}
+
+/* 3. Freshly Cooked: Fiery Heat Float */
+.promise-card:nth-child(3):hover .promise-icon-wrap img {
+  transform: scale(1.18) translateY(-4px);
+}
+
+/* 4. Hygienic Preparation: Shield Bounce */
+.promise-card:nth-child(4):hover .promise-icon-wrap img {
+  transform: scale(1.2) rotate(6deg);
+}
+
+/* 5. Honest Value: Coin Tilt */
+.promise-card:nth-child(5):hover .promise-icon-wrap img {
+  transform: scale(1.15) rotate(15deg);
+}
+
+/* 6. Trust Before Profit: Heartbeat Zoom */
+.promise-card:nth-child(6):hover .promise-icon-wrap img {
+  transform: scale(1.25);
+}
+
+@keyframes pulseIcon {
+  0% { filter: drop-shadow(0 0 2px rgba(244, 186, 63, 0.4)); }
+  100% { filter: drop-shadow(0 0 12px rgba(244, 186, 63, 0.8)); }
 }
 
 .promise-card-title {

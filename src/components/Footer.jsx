@@ -143,8 +143,9 @@ const Footer = () => {
           <div className="footer-col">
             <h4 className="footer-heading">KITCHEN <span className="text-green">HOURS</span></h4>
             <ul className="footer-info-list">
-              <li><span>Monday – Thursday:</span> <strong className="text-cream">08:00 AM – 10:00 PM</strong></li>
-              <li><span>Friday – Saturday:</span> <strong className="text-yellow">08:00 AM – 11:00 PM</strong></li>
+              <li><span>Mon – Thu:</span> <strong className="text-cream">08:00 AM – 10:00 PM</strong></li>
+              <li><span>Fri:</span> <strong className="text-yellow">08:00 AM – 11:00 AM | 3 PM – 11 PM</strong></li>
+              <li><span>Sat – Sun:</span> <strong className="text-cream">08:00 AM – 11:00 PM</strong></li>
             </ul>
           </div>
 
@@ -152,9 +153,14 @@ const Footer = () => {
           <div className="footer-col">
             <h4 className="footer-heading">CONTACT & <span className="text-red">ORDERS</span></h4>
             <ul className="footer-info-list">
-              <li><span>Phone / WhatsApp:</span> <strong className="text-cream">+92 331 6667054</strong></li>
+              <li><span>Phone / WhatsApp:</span> <strong className="text-cream">+92 311 50 77779</strong></li>
               <li><span>Delivery:</span> <strong className="text-yellow">Doorstep & Takeaway</strong></li>
-              <li><span>Inquiries:</span> <strong className="text-cream">info@desikartcuisine.com</strong></li>
+              <li>
+                <span>Inquiries:</span> 
+                <a href="mailto:desikartcuisine@gmail.com" className="text-cream" style={{ textDecoration: 'none' }}>
+                  desikartcuisine@gmail.com
+                </a>
+              </li>
             </ul>
           </div>
 

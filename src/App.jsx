@@ -112,7 +112,7 @@ function App() {
     message += `\n\nPlease confirm my order!`;
 
     const encodedMessage = encodeURIComponent(message);
-    window.open(`https://wa.me/923316667054?text=${encodedMessage}`, '_blank');
+    window.open(`https://wa.me/923115077779?text=${encodedMessage}`, '_blank');
   };
 
   const totalCartCount = cartItems.reduce((acc, item) => acc + (item.quantity || 1), 0);

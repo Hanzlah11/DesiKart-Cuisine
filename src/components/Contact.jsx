@@ -74,7 +74,7 @@ const Contact = ({ currentUser, userData, onOpenAuth }) => {
                 <span className="info-icon">📞</span>
                 <div>
                   <span className="info-label">Phone & WhatsApp</span>
-                  <strong className="text-cream">+92 0331 6667054</strong>
+                  <strong className="text-cream">+92 311 50 77779</strong>
                 </div>
               </div>
 
@@ -82,7 +82,13 @@ const Contact = ({ currentUser, userData, onOpenAuth }) => {
                 <span className="info-icon">✉️</span>
                 <div>
                   <span className="info-label">Email Support</span>
-                  <strong className="text-yellow">info@desikartcuisine.com</strong>
+                  <a 
+                    href="mailto:desikartcuisine@gmail.com" 
+                    className="text-yellow" 
+                    style={{ textDecoration: 'none', display: 'inline-block' }}
+                  >
+                    desikartcuisine.com
+                  </a>
                 </div>
               </div>
 
@@ -92,7 +98,8 @@ const Contact = ({ currentUser, userData, onOpenAuth }) => {
                   <span className="info-label">Kitchen Timings</span>
                   <strong className="text-green" style={{ display: 'block', lineHeight: '1.4' }}>
                     Mon–Thu: 8 AM - 10 PM<br />
-                    Fri–Sat: Open until 11 PM
+                    Fri: 8 AM - 11 AM | 3 PM - 11 PM<br />
+                    Sat–Sun: 8 AM - 11 PM
                   </strong>
                 </div>
               </div>
