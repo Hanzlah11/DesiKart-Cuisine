@@ -136,7 +136,7 @@ const Contact = ({ currentUser, userData, onOpenAuth }) => {
                 <span className="info-icon">📞</span>
                 <div>
                   <span className="info-label">Phone & WhatsApp</span>
-                  <strong className="text-cream">+92 0331 6667054</strong>
+                  <strong className="text-cream">+92 311 50 77779</strong>
                 </div>
               </div>
 
@@ -149,7 +149,7 @@ const Contact = ({ currentUser, userData, onOpenAuth }) => {
                     className="text-yellow" 
                     style={{ background: 'none', border: 'none', padding: 0, font: 'inherit', cursor: 'pointer', textDecoration: 'underline', display: 'inline-block' }}
                   >
-                    desikartcuisine.com
+                    info@desikartcuisine.com
                   </button>
                 </div>
               </div>
@@ -317,7 +317,7 @@ const Contact = ({ currentUser, userData, onOpenAuth }) => {
                     style={{ flex: 1, margin: 0 }}
                     disabled={emailLoading}
                   >
-                    {emailLoading ? 'SENDING...' : 'SEND TO GMAIL'}
+                    {emailLoading ? 'SENDING...' : 'GMAIL'}
                   </button>
                   <button 
                     type="button" 

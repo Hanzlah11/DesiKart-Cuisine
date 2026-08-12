@@ -1,8 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Footer.css';
 
 const Footer = () => {
   const canvasRef = useRef(null);
+
+  // Email Modal State for Footer
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [emailMessage, setEmailMessage] = useState('');
+  const [emailLoading, setEmailLoading] = useState(false);
+  const [emailSentSuccess, setEmailSentSuccess] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -106,6 +112,50 @@ const Footer = () => {
     };
   }, []);
 
+  const handleSendFooterEmail = async (e) => {
+    e.preventDefault();
+    if (!emailMessage.trim()) return;
+
+    setEmailLoading(true);
+
+    const formattedBody = `Dear DesiKart\n\nHello from Valued Patron "${emailMessage.trim()}"\n\nregards,\nValued Patron\nNot Provided\nVia Footer Inquiry`;
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          access_key: "0c2452b6-1e8c-4cfb-af5b-b69543c2badd",
+          subject: `New Footer Support Inquiry`,
+          name: "Valued Patron",
+          email: "desikartcuisine@gmail.com",
+          message: formattedBody
+        })
+      });
+
+      const result = await response.json();
+      setEmailLoading(false);
+
+      if (result.success) {
+        setEmailSentSuccess(true);
+        setTimeout(() => {
+          setEmailModalOpen(false);
+          setEmailSentSuccess(false);
+          setEmailMessage('');
+        }, 2500);
+      } else {
+        alert("Failed to send email. Please try again.");
+      }
+    } catch (err) {
+      setEmailLoading(false);
+      console.error("Web3Forms error:", err);
+      alert("An error occurred. Please check your internet connection.");
+    }
+  };
+
   return (
     <footer id="footer" className="footer-section">
       <canvas ref={canvasRef} className="footer-bg-canvas" />
@@ -120,10 +170,10 @@ const Footer = () => {
               <span className="footer-brand-text">DESI<span className="text-red">KART</span></span>
             </div>
             <p className="footer-bio">
-              Authentic Pakistani food and traditional recipes prepared with care, fresh ingredients, and true home-cooked flavor.[cite: 10]
+              Authentic Pakistani food and traditional recipes prepared with care, fresh ingredients, and true home-cooked flavor.
             </p>
             <div className="footer-signature-tag">
-              <span className="text-yellow">Desi Swaad, Dil Se.</span>[cite: 10]
+              <span className="text-yellow">Desi Swaad, Dil Se.</span>
             </div>
           </div>
 
@@ -157,15 +207,13 @@ const Footer = () => {
               <li><span>Delivery:</span> <strong className="text-yellow">Doorstep & Takeaway</strong></li>
               <li>
                 <span>Inquiries:</span>{' '}
-                <a 
-                  href="https://mail.google.com/mail/?view=cm&fs=1&to=desikartcuisine@gmail.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button 
+                  onClick={() => { setEmailSentSuccess(false); setEmailMessage(''); setEmailModalOpen(true); }}
                   className="text-cream"
-                  style={{ textDecoration: 'none' }}
+                  style={{ background: 'none', border: 'none', padding: 0, font: 'inherit', cursor: 'pointer', textDecoration: 'underline', display: 'inline' }}
                 >
                   info@desikartcuisine.com
-                </a>
+                </button>
               </li>
             </ul>
           </div>
@@ -175,9 +223,85 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="footer-bottom">
           <p>&copy; {new Date().getFullYear()} DesiKart Cuisine. All rights reserved.</p>
-          <p className="footer-craft">Crafted with tradition, passion, and fire.[cite: 10]</p>
+          <p className="footer-craft">Crafted with tradition, passion, and fire.</p>
         </div>
       </div>
+
+      {/* Footer Email Popup Modal */}
+      {emailModalOpen && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'rgba(0, 0, 0, 0.85)',
+          backdropFilter: 'blur(8px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 2000,
+          padding: '1rem'
+        }}>
+          <div style={{
+            background: '#141414',
+            border: '1px solid var(--border-gold)',
+            borderRadius: '20px',
+            padding: '2.5rem',
+            width: '100%',
+            maxWidth: '500px',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.9)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1.2rem',
+            position: 'relative'
+          }}>
+            <h3 style={{ fontFamily: 'var(--font-prime)', color: 'var(--logo-cream)', fontSize: '1.6rem' }}>
+              FOOTER SUPPORT <span className="text-yellow">INQUIRY</span>
+            </h3>
+
+            {emailSentSuccess ? (
+              <div style={{ textAlign: 'center', padding: '2rem 0', color: '#32D214', fontFamily: 'var(--font-prime)' }}>
+                <h3>✨ EMAIL SENT TO GMAIL!</h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginTop: '0.5rem' }}>Your message has been delivered straight to DesiKart's inbox.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSendFooterEmail} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div className="form-group">
+                  <label htmlFor="footerEmailMsg" style={{ fontFamily: 'var(--font-prime)', color: 'var(--logo-cream)', fontSize: '0.9rem' }}>Your Message</label>
+                  <textarea 
+                    id="footerEmailMsg"
+                    rows="4"
+                    value={emailMessage}
+                    onChange={(e) => setEmailMessage(e.target.value)}
+                    required
+                    placeholder="Type your message here..."
+                    style={{ background: 'rgba(10,10,10,0.6)', border: '1px solid var(--border-dark)', borderRadius: '8px', padding: '0.85rem', color: '#fff', width: '100%', fontFamily: 'var(--font-body)' }}
+                  ></textarea>
+                </div>
+
+                <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+                  <button 
+                    type="submit" 
+                    className="submit-btn"
+                    style={{ flex: 1, margin: 0 }}
+                    disabled={emailLoading}
+                  >
+                    {emailLoading ? 'SENDING...' : 'GMAIL'}
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => setEmailModalOpen(false)}
+                    style={{ background: 'transparent', border: '1px solid var(--border-dark)', color: 'var(--text-muted)', padding: '1rem', borderRadius: '8px', cursor: 'pointer', fontFamily: 'var(--font-prime)' }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </footer>
   );
 };
