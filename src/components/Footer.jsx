@@ -4,7 +4,6 @@ import './Footer.css';
 const Footer = () => {
   const canvasRef = useRef(null);
 
-  // Email Modal State for Footer
   const [emailModalOpen, setEmailModalOpen] = useState(false);
   const [emailMessage, setEmailMessage] = useState('');
   const [emailLoading, setEmailLoading] = useState(false);
@@ -26,32 +25,48 @@ const Footer = () => {
 
     window.addEventListener('resize', handleResize);
 
+    const isLightObsidian = () => {
+      const theme = document.documentElement.getAttribute('data-theme');
+      return theme === 'light' || theme === 'cardamom' || theme === 'light-obsidian';
+    };
+
     class SmokeParticle {
       constructor() {
         this.reset();
       }
       reset() {
         this.x = Math.random() * width;
-        this.y = height + Math.random() * 100;
-        this.radius = Math.random() * 100 + 70;
-        this.speedY = Math.random() * 0.35 + 0.1;
-        this.speedX = (Math.random() - 0.5) * 0.3;
-        this.opacity = Math.random() * 0.06 + 0.01;
-        this.fadeSpeed = Math.random() * 0.0003 + 0.0001;
+        this.y = height + Math.random() * 80;
+        this.radius = Math.random() * 110 + 75;
+        this.speedY = Math.random() * 0.35 + 0.12;
+        this.speedX = (Math.random() - 0.5) * 0.35;
+        this.opacity = Math.random() * 0.04 + 0.015;
+        this.fadeSpeed = Math.random() * 0.00035 + 0.00012;
       }
       update() {
         this.y -= this.speedY;
         this.x += this.speedX;
-        this.radius += 0.15;
+        this.radius += 0.16;
         this.opacity -= this.fadeSpeed;
         if (this.y < -this.radius || this.opacity <= 0) this.reset();
       }
       draw() {
         ctx.save();
+        const light = isLightObsidian();
         const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
-        gradient.addColorStop(0, `rgba(255, 249, 230, ${this.opacity})`);
-        gradient.addColorStop(0.5, `rgba(40, 25, 20, ${this.opacity * 0.4})`);
-        gradient.addColorStop(1, 'rgba(10, 10, 10, 0)');
+
+        if (light) {
+          // Light Obsidian: Silvery Misty Slate & Warm Amber Haze
+          gradient.addColorStop(0, `rgba(194, 203, 197, ${this.opacity * 1.5})`);
+          gradient.addColorStop(0.45, `rgba(255, 196, 77, ${this.opacity * 0.7})`);
+          gradient.addColorStop(1, 'rgba(43, 48, 45, 0)');
+        } else {
+          // Midnight Obsidian: Deep Volcanic Gold & Chili
+          gradient.addColorStop(0, `rgba(244, 186, 63, ${this.opacity})`);
+          gradient.addColorStop(0.5, `rgba(210, 50, 20, ${this.opacity * 0.3})`);
+          gradient.addColorStop(1, 'rgba(10, 10, 10, 0)');
+        }
+
         ctx.fillStyle = gradient;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
@@ -66,34 +81,39 @@ const Footer = () => {
       }
       reset() {
         this.x = Math.random() * width;
-        this.y = height + Math.random() * 50;
-        this.size = Math.random() * 2 + 0.6;
-        this.speedY = Math.random() * 0.9 + 0.3;
+        this.y = height + Math.random() * 40;
+        this.size = Math.random() * 2.2 + 0.7;
+        this.speedY = Math.random() * 0.85 + 0.35;
         this.speedX = (Math.random() - 0.5) * 0.5;
         this.opacity = Math.random() * 0.8 + 0.2;
         this.fadeSpeed = Math.random() * 0.004 + 0.001;
-        this.color = Math.random() > 0.5 ? '#F4BA3F' : '#D23214';
       }
       update() {
         this.y -= this.speedY;
-        this.x += this.speedX + Math.sin(this.y * 0.01) * 0.3;
+        this.x += this.speedX + Math.sin(this.y * 0.012) * 0.35;
         this.opacity -= this.fadeSpeed;
         if (this.y < -10 || this.opacity <= 0) this.reset();
       }
       draw() {
         ctx.save();
+        const light = isLightObsidian();
         ctx.globalAlpha = this.opacity;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = this.color;
+
+        const color = light
+          ? (Math.random() > 0.4 ? '#FFC44D' : '#E63B1C')
+          : (Math.random() > 0.4 ? '#F4BA3F' : '#D23214');
+
+        ctx.fillStyle = color;
+        ctx.shadowBlur = light ? 5 : 8;
+        ctx.shadowColor = color;
         ctx.fill();
         ctx.restore();
       }
     }
 
-    const smokeParticles = Array.from({ length: 15 }, () => new SmokeParticle());
+    const smokeParticles = Array.from({ length: 16 }, () => new SmokeParticle());
     const emberParticles = Array.from({ length: 30 }, () => new EmberParticle());
 
     let animationFrameId;
@@ -163,7 +183,6 @@ const Footer = () => {
       <div className="footer-content-wrapper">
         <div className="footer-grid">
           
-          {/* Col 1: Brand & Bio */}
           <div className="footer-col brand-col">
             <div className="footer-brand-group">
               <img src="/images/brand/desikart-logo.png" alt="Desikart Logo" className="footer-logo" />
@@ -177,7 +196,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Col 2: Quick Links */}
           <div className="footer-col">
             <h4 className="footer-heading">NAVIGATION</h4>
             <ul className="footer-links">
@@ -189,7 +207,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Col 3: Hours & Operations */}
           <div className="footer-col">
             <h4 className="footer-heading">KITCHEN <span className="text-green">HOURS</span></h4>
             <ul className="footer-info-list">
@@ -199,7 +216,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Col 4: Contact & Orders */}
           <div className="footer-col">
             <h4 className="footer-heading">CONTACT & <span className="text-red">ORDERS</span></h4>
             <ul className="footer-info-list">
@@ -208,6 +224,7 @@ const Footer = () => {
               <li>
                 <span>Inquiries:</span>{' '}
                 <button 
+                  type="button"
                   onClick={() => { setEmailSentSuccess(false); setEmailMessage(''); setEmailModalOpen(true); }}
                   className="text-cream"
                   style={{ background: 'none', border: 'none', padding: 0, font: 'inherit', cursor: 'pointer', textDecoration: 'underline', display: 'inline' }}
@@ -220,55 +237,30 @@ const Footer = () => {
 
         </div>
 
-        {/* Bottom Bar */}
         <div className="footer-bottom">
           <p>&copy; {new Date().getFullYear()} DesiKart Cuisine. All rights reserved.</p>
           <p className="footer-craft">Crafted with tradition, passion, and fire.</p>
         </div>
       </div>
 
-      {/* Footer Email Popup Modal */}
       {emailModalOpen && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          background: 'rgba(0, 0, 0, 0.85)',
-          backdropFilter: 'blur(8px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 2000,
-          padding: '1rem'
-        }}>
-          <div style={{
-            background: '#141414',
-            border: '1px solid var(--border-gold)',
-            borderRadius: '20px',
-            padding: '2.5rem',
-            width: '100%',
-            maxWidth: '500px',
-            boxShadow: '0 20px 40px rgba(0,0,0,0.9)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1.2rem',
-            position: 'relative'
-          }}>
-            <h3 style={{ fontFamily: 'var(--font-prime)', color: 'var(--logo-cream)', fontSize: '1.6rem' }}>
+        <div className="footer-modal-backdrop" onClick={() => setEmailModalOpen(false)}>
+          <div className="footer-modal-box" onClick={(e) => e.stopPropagation()}>
+            <h3 className="footer-modal-title">
               FOOTER SUPPORT <span className="text-yellow">INQUIRY</span>
             </h3>
 
             {emailSentSuccess ? (
-              <div style={{ textAlign: 'center', padding: '2rem 0', color: '#32D214', fontFamily: 'var(--font-prime)' }}>
-                <h3>✨ EMAIL SENT TO GMAIL!</h3>
+              <div style={{ textAlign: 'center', padding: '2rem 0', color: 'var(--accent-green)', fontFamily: 'var(--font-prime)' }}>
+                <h3 style={{ fontSize: '1.6rem', fontWeight: 400 }}>✨ EMAIL SENT TO GMAIL!</h3>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginTop: '0.5rem' }}>Your message has been delivered straight to DesiKart's inbox.</p>
               </div>
             ) : (
               <form onSubmit={handleSendFooterEmail} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div className="form-group">
-                  <label htmlFor="footerEmailMsg" style={{ fontFamily: 'var(--font-prime)', color: 'var(--logo-cream)', fontSize: '0.9rem' }}>Your Message</label>
+                <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                  <label htmlFor="footerEmailMsg" style={{ fontFamily: 'var(--font-prime)', color: 'var(--logo-cream)', fontSize: '0.9rem', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                    Your Message
+                  </label>
                   <textarea 
                     id="footerEmailMsg"
                     rows="4"
@@ -276,7 +268,7 @@ const Footer = () => {
                     onChange={(e) => setEmailMessage(e.target.value)}
                     required
                     placeholder="Type your message here..."
-                    style={{ background: 'rgba(10,10,10,0.6)', border: '1px solid var(--border-dark)', borderRadius: '8px', padding: '0.85rem', color: '#fff', width: '100%', fontFamily: 'var(--font-body)' }}
+                    className="footer-modal-textarea"
                   ></textarea>
                 </div>
 
@@ -287,12 +279,12 @@ const Footer = () => {
                     style={{ flex: 1, margin: 0 }}
                     disabled={emailLoading}
                   >
-                    {emailLoading ? 'SENDING...' : 'GMAIL'}
+                    {emailLoading ? 'SENDING...' : 'SEND TO GMAIL'}
                   </button>
                   <button 
                     type="button" 
                     onClick={() => setEmailModalOpen(false)}
-                    style={{ background: 'transparent', border: '1px solid var(--border-dark)', color: 'var(--text-muted)', padding: '1rem', borderRadius: '8px', cursor: 'pointer', fontFamily: 'var(--font-prime)' }}
+                    style={{ background: 'transparent', border: '1px solid var(--border-dark)', color: 'var(--text-muted)', padding: '0.85rem 1.4rem', borderRadius: '8px', cursor: 'pointer', fontFamily: 'var(--font-prime)', fontSize: '0.95rem', letterSpacing: '1px', textTransform: 'uppercase' }}
                   >
                     Cancel
                   </button>

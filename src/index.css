@@ -1,21 +1,63 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@1,500&family=Inter:wght@300;400;500;600;700&display=swap');
 
-:root {
+/* =========================================================
+   1. MIDNIGHT OBSIDIAN THEME (Default / Deep Charcoal Dark)
+========================================================= */
+:root,
+html[data-theme="dark"],
+html[data-theme="obsidian"] {
   --bg-canvas: #0A0A0A;
   --bg-surface: #141416;
-  /* Exact logo-matched tones */
+  --bg-elevated: #1B1B1E;
+
   --logo-cream: #FFF9E6;
   --logo-yellow: #F4BA3F;
   --logo-red: #D23214;
   --accent-green: #22A352;
   --text-muted: #B8B8B2;
-  
-  --border-dark: rgba(255, 249, 230, 0.12);
+
+  --border-subtle: rgba(255, 249, 230, 0.08);
+  --border-dark: rgba(255, 249, 230, 0.14);
   --border-gold: rgba(244, 186, 63, 0.4);
 
-  --font-prime: 'Anton', 'Oswald', sans-serif;
+  --nav-glass: rgba(10, 10, 10, 0.65);
+  --nav-glass-scrolled: rgba(14, 14, 16, 0.94);
+  --dropdown-bg: #141416;
+  --card-shadow: 0 14px 35px rgba(0, 0, 0, 0.8);
+  --hero-overlay-1: rgba(10, 10, 10, 0.96);
+  --hero-overlay-2: rgba(10, 10, 10, 0.75);
+
+  --font-prime: 'Oswald', sans-serif;
   --font-serif: 'Playfair Display', serif;
   --font-body: 'Inter', sans-serif;
+}
+
+/* =========================================================
+   2. LIGHT OBSIDIAN THEME (Slate-Charcoal with Darker Grey Cards)
+========================================================= */
+html[data-theme="light"],
+html[data-theme="cardamom"],
+html[data-theme="light-obsidian"] {
+  --bg-canvas: #2B302D;          /* Soft matte slate charcoal base */
+  --bg-surface: #1E2220;         /* Darker Smokey Graphite for Cards */
+  --bg-elevated: #181B19;        /* Deep Inset / Elevated Containers */
+
+  --logo-cream: #F8FAF8;          /* Ultra-crisp silver-white text */
+  --logo-yellow: #FFC44D;         /* Bright warm saffron amber */
+  --logo-red: #E63B1C;            /* Vivid tandoor chili red */
+  --accent-green: #2ECC71;        /* Bright mint cilantro */
+  --text-muted: #B0BBB4;          /* Clear readable ash-silver text */
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-dark: rgba(255, 255, 255, 0.14);
+  --border-gold: rgba(255, 196, 77, 0.5);
+
+  --nav-glass: rgba(43, 48, 45, 0.86);
+  --nav-glass-scrolled: rgba(30, 34, 32, 0.96);
+  --dropdown-bg: #1E2220;
+  --card-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+  --hero-overlay-1: rgba(30, 34, 32, 0.96);
+  --hero-overlay-2: rgba(30, 34, 32, 0.82);
 }
 
 * {
@@ -32,28 +74,42 @@ body {
   background-color: var(--bg-canvas);
   color: var(--logo-cream);
   font-family: var(--font-body);
-  line-height: 1.7; /* Balanced, clean spacing */
+  line-height: 1.7;
   overflow-x: hidden;
   position: relative;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Typography Color Variants matched to logo */
+/* Base Oswald Heading Defaults (Overridable by Component CSS) */
+h1, h2, h3, h4, 
+.hero-main-title, 
+.brand-text, 
+.section-title {
+  font-family: var(--font-prime);
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+h1 span, h2 span, h3 span, h4 span, 
+.hero-main-title span, 
+.brand-text span, 
+.section-title span {
+  font-weight: inherit;
+}
+
 .text-cream {
   color: var(--logo-cream);
 }
 
 .text-yellow {
   color: var(--logo-yellow);
-  text-shadow: 0 0 15px rgba(244, 186, 63, 0.35);
 }
 
 .text-red {
   color: var(--logo-red);
-  text-shadow: 0 0 15px rgba(210, 50, 20, 0.35);
 }
 
 .text-green {
   color: var(--accent-green);
-  text-shadow: 0 0 15px rgba(34, 163, 82, 0.35);
 }
-

@@ -1,20 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import './Header.css';
 
-const Header = ({ cartCount = 0, onCartClick, currentUser, userData, onOpenAuth, onOpenProfile, onSignOut }) => {
+const Header = ({ 
+  cartCount = 0, 
+  onCartClick, 
+  currentUser, 
+  userData, 
+  onOpenAuth, 
+  onOpenProfile, 
+  onSignOut 
+}) => {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 40) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 40);
       const sections = ['hero', 'menu', 'promise', 'story', 'contact'];
       const scrollPosition = window.scrollY + 200;
 
@@ -48,14 +55,11 @@ const Header = ({ cartCount = 0, onCartClick, currentUser, userData, onOpenAuth,
   return (
     <header className={`cinematic-navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="nav-container">
-        
-        {/* Logo at Extreme Left */}
         <a href="#hero" onClick={handleLogoClick} className="brand-group">
           <img src="/images/brand/desikart-logo.png" alt="Desikart Logo" className="nav-logo" />
           <span className="brand-text">DESI<span className="text-red">KART</span></span>
         </a>
 
-        {/* Desktop Navigation Links */}
         <nav className="nav-links">
           <a href="#hero" className={`nav-link ${activeSection === 'hero' ? 'active' : ''}`}><span>Home</span></a>
           <a href="#menu" className={`nav-link ${activeSection === 'menu' ? 'active' : ''}`}><span>Menu</span></a>
@@ -64,12 +68,11 @@ const Header = ({ cartCount = 0, onCartClick, currentUser, userData, onOpenAuth,
           <a href="#contact" className={`nav-link ${activeSection === 'contact' ? 'active' : ''}`}><span>Contact</span></a>
         </nav>
 
-        {/* Action Controls */}
         <div className="nav-actions">
-          {/* User Auth / Profile Section */}
           {currentUser ? (
             <div className="user-menu-container" style={{ position: 'relative' }}>
               <button 
+                type="button"
                 className="user-profile-trigger" 
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 title="Account Settings"
@@ -83,22 +86,22 @@ const Header = ({ cartCount = 0, onCartClick, currentUser, userData, onOpenAuth,
                     <strong>{userData?.name || 'User'}</strong>
                     <small>{currentUser.email}</small>
                   </div>
-                  <button onClick={() => { setDropdownOpen(false); onOpenProfile(); }}>
+                  <button type="button" onClick={() => { setDropdownOpen(false); onOpenProfile(); }}>
                     ⚙️ Edit Profile
                   </button>
-                  <button onClick={() => { setDropdownOpen(false); onSignOut(); }} className="dropdown-signout">
+                  <button type="button" onClick={() => { setDropdownOpen(false); onSignOut(); }} className="dropdown-signout">
                     🚪 Sign Out
                   </button>
                 </div>
               )}
             </div>
           ) : (
-            <button className="nav-login-btn" onClick={onOpenAuth}>
+            <button type="button" className="nav-login-btn" onClick={onOpenAuth}>
               LOGIN / SIGNUP
             </button>
           )}
 
-          <button className="cart-btn" aria-label="Shopping Cart" onClick={onCartClick}>
+          <button type="button" className="cart-btn" aria-label="Shopping Cart" onClick={onCartClick}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"></path>
               <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -107,13 +110,12 @@ const Header = ({ cartCount = 0, onCartClick, currentUser, userData, onOpenAuth,
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
           </button>
 
-          {/* ORDER NOW button - Desktop Only */}
           <a href="#menu" className="nav-order-btn desktop-order-btn">
             ORDER NOW
           </a>
 
-          {/* Hamburger Menu Toggle Button - Mobile Only */}
           <button 
+            type="button"
             className="mobile-menu-toggle" 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle Mobile Menu"
@@ -121,10 +123,8 @@ const Header = ({ cartCount = 0, onCartClick, currentUser, userData, onOpenAuth,
             {mobileMenuOpen ? '✕' : '☰'}
           </button>
         </div>
-
       </div>
 
-      {/* Collapsible Mobile Dropdown Drawer */}
       {mobileMenuOpen && (
         <div className="mobile-dropdown-menu">
           <a href="#hero" onClick={handleNavLinkClick} className={`mobile-nav-link ${activeSection === 'hero' ? 'active' : ''}`}>Home</a>

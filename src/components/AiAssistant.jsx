@@ -113,14 +113,14 @@ const AiAssistant = ({ onOpenCart, onOpenAuth }) => {
     <div className="ai-assistant-container">
       {!isOpen && (
         <button className="ai-trigger-btn" onClick={() => setIsOpen(true)} aria-label="Open AI Assistant">
-          🤖 AI Concierge
+          AI Assistant
         </button>
       )}
 
       {isOpen && (
         <div className="ai-chat-window">
           <div className="ai-chat-header">
-            <h3>DESIKART <span className="text-yellow">AI CONCIERGE</span></h3>
+            <h3>DESIKART <span className="text-yellow">AI ASSISTANT</span></h3>
             <button onClick={() => setIsOpen(false)}>&times;</button>
           </div>
 

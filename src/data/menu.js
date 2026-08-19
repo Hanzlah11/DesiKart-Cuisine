@@ -6,13 +6,15 @@ export const menuCategories = [
   { id: 'bbq', label: 'BBQ / Dinner' },
   { id: 'family-deals', label: 'Family Deals' },
   { id: 'addons', label: 'Add-ons' },
-]
+];
+
+const SINGLE_COMPLIMENTARY = ['2 Naans', 'Half Raita', 'Half Salad', '250ml Drink'];
+const FAMILY_COMPLIMENTARY = ['6 Naans', '1 Full Raita', '1 Full Salad', '1.5L Drink'];
 
 export const menuItems = [
   /* =========================================================
      BREAKFAST
   ========================================================= */
-
   {
     id: 'beef-nihari',
     name: 'Beef Nihari',
@@ -22,8 +24,8 @@ export const menuItems = [
     image: '/images/menu/beef_nihari.jpeg',
     description: 'Slow-cooked to perfection with rich, aromatic flavours.',
     serving: 'Single Serving',
+    complimentary: SINGLE_COMPLIMENTARY,
   },
-
   {
     id: 'special-nali-beef-nihari',
     name: 'Special Nali Beef Nihari',
@@ -34,8 +36,8 @@ export const menuItems = [
     description: 'Rich slow-cooked beef nihari served with special nali.',
     serving: 'Single Serving',
     badge: 'Special',
+    complimentary: SINGLE_COMPLIMENTARY,
   },
-
   {
     id: 'beef-paya',
     name: 'Beef Paya',
@@ -45,8 +47,8 @@ export const menuItems = [
     image: '/images/menu/beef_paya.jpeg',
     description: 'Traditional slow-cooked beef paya with deep desi flavour.',
     serving: 'Single Serving',
+    complimentary: SINGLE_COMPLIMENTARY,
   },
-
   {
     id: 'special-nali-beef-paya',
     name: 'Special Nali Beef Paya',
@@ -57,12 +59,12 @@ export const menuItems = [
     description: 'Premium beef paya served with special nali.',
     serving: 'Single Serving',
     badge: 'Special',
+    complimentary: SINGLE_COMPLIMENTARY,
   },
 
   /* =========================================================
      LUNCH
   ========================================================= */
-
   {
     id: 'degi-beef-qorma',
     name: 'Degi Beef Qorma',
@@ -72,8 +74,8 @@ export const menuItems = [
     image: '/images/menu/degi_beef_qorma.jpeg',
     description: 'Traditional degi beef qorma, rich and aromatic.',
     serving: 'Single Serving',
+    complimentary: SINGLE_COMPLIMENTARY,
   },
-
   {
     id: 'mutton-kunna',
     name: 'Chinioti Mutton Kunna',
@@ -84,8 +86,8 @@ export const menuItems = [
     description: 'Authentic Chinioti style mutton cooked slowly in an earthen clay pot.',
     serving: 'Single Serving',
     badge: 'Special',
+    complimentary: SINGLE_COMPLIMENTARY,
   },
-
   {
     id: 'beef-haleem',
     name: 'Beef Haleem',
@@ -95,8 +97,8 @@ export const menuItems = [
     image: '/images/menu/beef_haleem.jpeg',
     description: 'Slow-cooked beef haleem with a rich traditional finish.',
     serving: 'Single Serving',
+    complimentary: SINGLE_COMPLIMENTARY,
   },
-
   {
     id: 'kalay-channay',
     name: 'Kalay Channay',
@@ -106,12 +108,12 @@ export const menuItems = [
     image: '/images/menu/kalay_channay.jpeg',
     description: 'Traditional black chickpeas cooked with aromatic spices.',
     serving: 'Single Serving',
+    complimentary: SINGLE_COMPLIMENTARY,
   },
 
   /* =========================================================
      WEEKEND SPECIALS
   ========================================================= */
-
   {
     id: 'chicken-achari',
     name: 'Chicken Achari',
@@ -122,12 +124,12 @@ export const menuItems = [
     description: 'Bold, tangy chicken with authentic traditional pickling spices.',
     serving: 'Single Serving',
     badge: 'Weekend Special',
+    complimentary: SINGLE_COMPLIMENTARY,
   },
 
   /* =========================================================
-     BBQ / DINNER
+     BBQ / DINNER (Coming Soon items locked)
   ========================================================= */
-
   {
     id: 'chicken-tikka-leg',
     name: 'Chicken Tikka Leg',
@@ -137,8 +139,9 @@ export const menuItems = [
     image: '/images/menu/chicken_tikka_leg.jpeg',
     description: 'Whole chicken leg tikka, BBQ grilled to perfection.',
     serving: 'Single Serving',
+    complimentary: SINGLE_COMPLIMENTARY,
+    isLocked: true,
   },
-
   {
     id: 'chicken-tikka-breast',
     name: 'Chicken Tikka Chest',
@@ -148,8 +151,9 @@ export const menuItems = [
     image: '/images/menu/chicken_tikka_breast.jpeg',
     description: 'Whole chicken chest tikka with an authentic BBQ finish.',
     serving: 'Single Serving',
+    complimentary: SINGLE_COMPLIMENTARY,
+    isLocked: true,
   },
-
   {
     id: 'chicken-tikka-boti-half-with-bone',
     name: 'Chicken Tikka Boti Half (With Bone)',
@@ -159,8 +163,8 @@ export const menuItems = [
     image: '/images/menu/chicken_boti_with_bone_half.png',
     description: 'Half serving of juicy BBQ chicken tikka boti with bone.',
     serving: 'Half',
+    isLocked: true,
   },
-
   {
     id: 'chicken-tikka-boti-full-with-bone',
     name: 'Chicken Tikka Boti Full (With Bone)',
@@ -170,8 +174,8 @@ export const menuItems = [
     image: '/images/menu/chicken_boti_with_bone_full.jpeg',
     description: 'Full serving of juicy BBQ chicken tikka boti with bone.',
     serving: 'Full',
+    isLocked: true,
   },
-
   {
     id: 'chicken-boti-half-boneless',
     name: 'Chicken Boti Half (Boneless)',
@@ -181,8 +185,8 @@ export const menuItems = [
     image: '/images/menu/chicken_boti_boneless_half.jpeg',
     description: 'Tender boneless chicken boti, BBQ grilled to perfection.',
     serving: 'Half',
+    isLocked: true,
   },
-
   {
     id: 'chicken-boti-full-boneless',
     name: 'Chicken Boti Full (Boneless)',
@@ -192,12 +196,12 @@ export const menuItems = [
     image: '/images/menu/chicken_boti_boneless_full.jpeg',
     description: 'Full serving of tender boneless BBQ chicken boti.',
     serving: 'Full',
+    isLocked: true,
   },
 
   /* =========================================================
      FAMILY DEALS
   ========================================================= */
-
   {
     id: 'family-kalay-channay',
     name: 'Kalay Channay',
@@ -208,8 +212,8 @@ export const menuItems = [
     description: 'Family portion with naan, fresh salad, zeera raita and drink.',
     serving: 'Family Deal',
     badge: 'Family Deal',
+    complimentary: FAMILY_COMPLIMENTARY,
   },
-
   {
     id: 'family-beef-haleem',
     name: 'Beef Haleem',
@@ -220,8 +224,8 @@ export const menuItems = [
     description: 'Family portion with naan, fresh salad, zeera raita and drink.',
     serving: 'Family Deal',
     badge: 'Family Deal',
+    complimentary: FAMILY_COMPLIMENTARY,
   },
-
   {
     id: 'family-degi-beef-qorma',
     name: 'Degi Beef Qorma',
@@ -232,8 +236,8 @@ export const menuItems = [
     description: 'Family portion with roghni naan, fresh salad, zeera raita and drink.',
     serving: 'Family Deal',
     badge: 'Family Deal',
+    complimentary: FAMILY_COMPLIMENTARY,
   },
-
   {
     id: 'family-chinioti-mutton-kunna',
     name: 'Chinioti Mutton Kunna',
@@ -244,8 +248,8 @@ export const menuItems = [
     description: 'Signature Chinioti Mutton Kunna family deal for 4–5 persons.',
     serving: 'Family Deal',
     badge: 'Signature',
+    complimentary: FAMILY_COMPLIMENTARY,
   },
-
   {
     id: 'family-chicken-achari',
     name: 'Chicken Achari',
@@ -256,8 +260,8 @@ export const menuItems = [
     description: 'Family portion with roghni naan, fresh salad, zeera raita and drink.',
     serving: 'Family Deal',
     badge: 'Family Deal',
+    complimentary: FAMILY_COMPLIMENTARY,
   },
-
   {
     id: 'family-special-nali-beef-nihari',
     name: 'Special Nali Beef Nihari',
@@ -268,8 +272,8 @@ export const menuItems = [
     description: 'Special nali beef nihari family deal for 4–5 persons.',
     serving: 'Family Deal',
     badge: 'Special Family Deal',
+    complimentary: FAMILY_COMPLIMENTARY,
   },
-
   {
     id: 'family-beef-paya',
     name: 'Beef Paya',
@@ -280,8 +284,8 @@ export const menuItems = [
     description: 'Traditional beef paya family deal for 4–5 persons.',
     serving: 'Family Deal',
     badge: 'Family Deal',
+    complimentary: FAMILY_COMPLIMENTARY,
   },
-
   {
     id: 'family-special-nali-beef-paya',
     name: 'Special Nali Beef Paya',
@@ -292,12 +296,12 @@ export const menuItems = [
     description: 'Premium special nali beef paya family deal for 4–5 persons.',
     serving: 'Family Deal',
     badge: 'Special Family Deal',
+    complimentary: FAMILY_COMPLIMENTARY,
   },
 
   /* =========================================================
-     ADD-ONS
+     ADD-ONS (Garlic Naan locked)
   ========================================================= */
-
   {
     id: 'plain-naan',
     name: 'Plain Naan',
@@ -308,7 +312,6 @@ export const menuItems = [
     description: 'Freshly baked traditional plain naan.',
     serving: 'Add-on',
   },
-
   {
     id: 'roghni-naan',
     name: 'Roghni Naan',
@@ -319,7 +322,6 @@ export const menuItems = [
     description: 'Rich traditional roghni naan.',
     serving: 'Add-on',
   },
-
   {
     id: 'garlic-naan',
     name: 'Garlic Naan',
@@ -329,8 +331,8 @@ export const menuItems = [
     image: '/images/menu/garlic_naan.jpeg',
     description: 'Fresh naan finished with aromatic garlic.',
     serving: 'Add-on',
+    isLocked: true,
   },
-
   {
     id: 'zeera-raita',
     name: 'Zeera Raita',
@@ -341,7 +343,6 @@ export const menuItems = [
     description: 'Cooling yogurt raita seasoned with zeera.',
     serving: 'Add-on',
   },
-
   {
     id: 'pudina-raita',
     name: 'Pudina Raita',
@@ -352,7 +353,6 @@ export const menuItems = [
     description: 'Refreshing mint yogurt raita.',
     serving: 'Add-on',
   },
-
   {
     id: 'mixed-pickle',
     name: 'Mixed Pickle',
@@ -363,7 +363,6 @@ export const menuItems = [
     description: 'Traditional mixed achar with bold desi flavour.',
     serving: 'Add-on',
   },
-
   {
     id: 'mineral-water',
     name: 'Mineral Water 500ml',
@@ -374,7 +373,6 @@ export const menuItems = [
     description: '500ml mineral water.',
     serving: 'Add-on',
   },
-
   {
     id: 'soft-drink',
     name: 'Soft Drink 250ml Can',
@@ -385,11 +383,11 @@ export const menuItems = [
     description: 'Chilled 250ml soft drink can.',
     serving: 'Add-on',
   },
-]
+];
 
 export const formatPrice = (price) =>
   new Intl.NumberFormat('en-PK', {
     style: 'currency',
     currency: 'PKR',
     maximumFractionDigits: 0,
-  }).format(price)
+  }).format(price);

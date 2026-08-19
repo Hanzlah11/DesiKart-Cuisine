@@ -1,8 +1,8 @@
 .promise-section {
   position: relative;
   max-width: 1280px;
-  margin: 6rem auto;
-  padding: 5rem 2rem;
+  margin: 5rem auto;
+  padding: 4.5rem 2rem;
   overflow: hidden;
   border-radius: 24px;
 }
@@ -29,18 +29,23 @@
 }
 
 .section-title {
-  font-family: var(--font-prime);
+  font-family: var(--font-prime) !important;
   font-size: 3.8rem;
+  font-weight: 400 !important;
   letter-spacing: 2.5px;
   color: var(--logo-cream);
   text-transform: uppercase;
+}
+
+.section-title span {
+  font-weight: inherit !important;
 }
 
 .section-subtitle {
   font-family: var(--font-serif);
   font-style: italic;
   color: var(--logo-yellow);
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   margin-top: 0.4rem;
 }
 
@@ -54,9 +59,10 @@
 .promise-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-dark);
-  border-radius: 16px;
+  border-radius: 20px;
   padding: 2.2rem;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: var(--card-shadow);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -72,102 +78,107 @@
   width: 4px;
   height: 0;
   background: var(--logo-yellow);
-  transition: height 0.4s ease;
+  transition: height 0.35s ease;
+}
+
+.promise-card.card-red::before {
+  background: var(--logo-red);
+}
+
+.promise-card.card-green::before {
+  background: var(--accent-green);
 }
 
 .promise-card:hover {
   border-color: var(--border-gold);
-  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(244, 186, 63, 0.2);
   transform: translateY(-6px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25), 0 0 20px rgba(255, 196, 77, 0.16);
 }
 
 .promise-card:hover::before {
   height: 100%;
 }
 
-/* --- Double Icon Size & Wrapper --- */
+/* Icon Wrap */
 .promise-icon-wrap {
-  width: 80px;
-  height: 80px;
-  background: rgba(244, 186, 63, 0.08);
-  border: 1px solid rgba(244, 186, 63, 0.25);
+  width: 76px;
+  height: 76px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
   border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
-  transition: all 0.4s ease;
+  transition: all 0.35s ease;
 }
 
 .promise-card:hover .promise-icon-wrap {
-  background: rgba(244, 186, 63, 0.15);
+  background: var(--bg-canvas);
   border-color: var(--logo-yellow);
-  box-shadow: 0 0 15px rgba(244, 186, 63, 0.4);
+  box-shadow: 0 0 16px rgba(255, 196, 77, 0.25);
 }
 
-/* Doubled image size inside the wrapper */
 .promise-icon-wrap img {
-  width: 56px !important;
-  height: 56px !important;
+  width: 50px !important;
+  height: 50px !important;
   object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* --- Unique Icon Animations on Card Hover --- */
-
-/* 1. Halal Ingredients: Gentle Pulse */
+/* Hover Icon Animations */
 .promise-card:nth-child(1):hover .promise-icon-wrap img {
   transform: scale(1.15);
   animation: pulseIcon 1.2s infinite alternate;
 }
 
-/* 2. Authentic Recipes: Subtle Tilt */
 .promise-card:nth-child(2):hover .promise-icon-wrap img {
   transform: scale(1.15) rotate(-8deg);
 }
 
-/* 3. Freshly Cooked: Fiery Heat Float */
 .promise-card:nth-child(3):hover .promise-icon-wrap img {
   transform: scale(1.18) translateY(-4px);
 }
 
-/* 4. Hygienic Preparation: Shield Bounce */
 .promise-card:nth-child(4):hover .promise-icon-wrap img {
   transform: scale(1.2) rotate(6deg);
 }
 
-/* 5. Honest Value: Coin Tilt */
 .promise-card:nth-child(5):hover .promise-icon-wrap img {
   transform: scale(1.15) rotate(15deg);
 }
 
-/* 6. Trust Before Profit: Heartbeat Zoom */
 .promise-card:nth-child(6):hover .promise-icon-wrap img {
   transform: scale(1.25);
 }
 
 @keyframes pulseIcon {
-  0% { filter: drop-shadow(0 0 2px rgba(244, 186, 63, 0.4)); }
-  100% { filter: drop-shadow(0 0 12px rgba(244, 186, 63, 0.8)); }
+  0% { filter: drop-shadow(0 0 2px rgba(255, 196, 77, 0.3)); }
+  100% { filter: drop-shadow(0 0 10px rgba(255, 196, 77, 0.6)); }
 }
 
 .promise-card-title {
-  font-family: var(--font-prime);
-  font-size: 1.5rem;
+  font-family: var(--font-prime) !important;
+  font-size: 1.45rem;
+  font-weight: 300 !important;
   letter-spacing: 1.5px;
   color: var(--logo-cream);
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.75rem;
   text-transform: uppercase;
 }
 
 .promise-card-desc {
   color: var(--text-muted);
-  font-size: 0.98rem;
+  font-size: 0.96rem;
   line-height: 1.7;
 }
 
 @media (max-width: 768px) {
   .section-title {
     font-size: 3rem;
+  }
+  .promise-section {
+    padding: 3rem 1.2rem;
   }
 }

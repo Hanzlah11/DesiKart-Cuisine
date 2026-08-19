@@ -1,13 +1,12 @@
 .story-section {
   position: relative;
   max-width: 1280px;
-  margin: 6rem auto;
+  margin: 5rem auto 7rem;
   padding: 5rem 2rem;
   overflow: hidden;
   border-radius: 24px;
 }
 
-/* Background Smoke & Ember Canvas */
 .story-bg-canvas {
   position: absolute;
   top: 0;
@@ -21,182 +20,353 @@
 .story-content-wrapper {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  align-items: center;
-  gap: 4rem;
 }
 
-/* --- Left Column: Story Text --- */
-.story-text-col {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+.story-header-center {
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 4.5rem;
 }
 
 .story-tagline {
-  font-family: var(--font-prime);
-  font-size: 1.1rem;
-  letter-spacing: 2px;
+  font-family: var(--font-prime) !important;
   color: var(--logo-yellow);
+  font-size: 1.15rem;
+  letter-spacing: 3px;
+  font-weight: 300 !important;
+  text-transform: uppercase;
+  display: block;
   margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  display: inline-block;
 }
 
-.story-title {
-  font-family: var(--font-prime);
-  font-size: 3.4rem;
-  line-height: 1.1;
+.story-main-title {
+  font-family: var(--font-prime) !important;
+  font-size: 3.8rem;
+  font-weight: 200 !important;
   letter-spacing: 2px;
-  margin-bottom: 2rem;
+  line-height: 1.1;
   text-transform: uppercase;
+  color: var(--logo-cream);
 }
 
-.story-body {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-  color: var(--text-muted);
-  font-size: 1.05rem;
-  line-height: 1.8;
-  margin-bottom: 2.5rem;
+.story-main-title span {
+  font-weight: inherit !important;
 }
 
-/* Signature Styling */
-.story-signature {
+/* =========================================================
+   TIMELINE STRUCTURE
+========================================================= */
+.story-timeline-container {
   position: relative;
-  padding-left: 1.2rem;
-  border-left: 3px solid var(--logo-yellow);
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2rem 0;
 }
 
-.signature-text {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 1.8rem;
-  color: var(--logo-yellow);
-  letter-spacing: 1px;
-  text-shadow: 0 0 15px rgba(244, 186, 63, 0.3);
-}
-
-/* --- Right Column: Cinematic Emblem & Signature Dish --- */
-.story-image-col {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-  gap: 2rem;
-}
-
-.story-glow-backdrop {
+.story-timeline-container::before {
+  content: '';
   position: absolute;
-  width: 480px;
-  height: 480px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle, 
-    rgba(210, 50, 20, 0.32) 0%, 
-    rgba(244, 186, 63, 0.18) 50%, 
-    transparent 75%
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--border-gold) 15%,
+    var(--logo-yellow) 50%,
+    var(--border-gold) 85%,
+    transparent 100%
   );
-  animation: pulseGlow 4s infinite ease-in-out;
-  pointer-events: none;
+  transform: translateX(-50%);
   z-index: 1;
 }
 
-/* Prominent Cinematic Floating Logo Emblem Above Dish */
-.story-emblem-container {
+.timeline-step {
   position: relative;
-  z-index: 3;
-  width: 150px;
-  height: 150px;
-  background: rgba(12, 12, 12, 0.9);
-  border: 2px solid var(--border-gold);
+  display: flex;
+  margin-bottom: 4rem;
+  width: 100%;
+  align-items: center;
+}
+
+.timeline-step:last-child {
+  margin-bottom: 2rem;
+}
+
+.timeline-step.left {
+  justify-content: flex-start;
+}
+
+.timeline-step.right {
+  justify-content: flex-end;
+}
+
+.timeline-node {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
+  background: var(--bg-surface);
+  border: 2px solid var(--logo-yellow);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 25px rgba(244, 186, 63, 0.4);
-  animation: floatLogo 4s infinite ease-in-out;
+  font-size: 1.1rem;
+  z-index: 3;
+  box-shadow: 0 0 16px rgba(255, 196, 77, 0.4);
+  transition: all 0.3s ease;
 }
 
-.story-emblem-logo {
-  width: 110px;
-  height: 110px;
-  object-fit: contain;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
+.timeline-step:hover .timeline-node {
+  transform: translate(-50%, -50%) scale(1.18);
+  box-shadow: 0 0 24px rgba(255, 196, 77, 0.7);
+  background: var(--bg-elevated);
 }
 
-@keyframes floatLogo {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-.story-image-card {
+.timeline-card {
+  width: 44%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-dark);
+  border-radius: 20px;
+  padding: 2rem 2.2rem;
+  box-shadow: var(--card-shadow);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   z-index: 2;
-  width: 100%;
-  max-width: 440px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-gold);
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(244, 186, 63, 0.2);
-  transition: transform 0.4s ease;
 }
 
-.story-image-card:hover {
-  transform: translateY(-6px);
+/* =========================================================
+   CUSTOM INFO BOX ANIMATIONS
+========================================================= */
+
+/* Box 1: The Spark (Luminous Glimmer Float) */
+@keyframes sparkEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+    filter: brightness(1.6);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: brightness(1);
+  }
+}
+.anim-spark .timeline-card {
+  animation: sparkEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.anim-spark:hover .timeline-card {
+  border-color: var(--logo-yellow);
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3), 0 0 24px rgba(255, 196, 77, 0.25);
 }
 
-.story-dish-img {
-  width: 100%;
-  height: 340px;
-  object-fit: cover;
-  display: block;
+/* Box 2: Generations of Craft (Deep Tandoor Heat Shimmer) */
+@keyframes flameEntrance {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+    box-shadow: 0 0 35px rgba(230, 59, 28, 0.4);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    box-shadow: var(--card-shadow);
+  }
+}
+.anim-flame .timeline-card {
+  animation: flameEntrance 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.anim-flame:hover .timeline-card {
+  border-color: var(--logo-red);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3), 0 0 22px rgba(230, 59, 28, 0.22);
 }
 
-.story-img-badge {
-  padding: 1.2rem 1.5rem;
-  background: var(--bg-surface);
+/* Box 3: Pure Philosophy (Smooth Organic Rise) */
+@keyframes leafEntrance {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px) rotate(-1deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) rotate(0deg);
+  }
+}
+.anim-leaf .timeline-card {
+  animation: leafEntrance 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.anim-leaf:hover .timeline-card {
+  border-color: var(--accent-green);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3), 0 0 22px rgba(46, 204, 113, 0.22);
+}
+
+/* Box 4: The Bond (Solid Anchored Expansion) */
+@keyframes bondEntrance {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  65% {
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.anim-bond .timeline-card {
+  animation: bondEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.anim-bond:hover .timeline-card {
+  border-color: var(--border-gold);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3), 0 0 24px rgba(255, 196, 77, 0.25);
+}
+
+/* =========================================================
+   TEXT & MEDIA ELEMENTS
+========================================================= */
+.timeline-step-meta {
   display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
 }
 
-.badge-title {
-  font-family: var(--font-prime);
-  font-size: 1.1rem;
-  letter-spacing: 1.5px;
+.timeline-num {
+  font-family: var(--font-prime) !important;
   color: var(--logo-yellow);
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  font-weight: 400 !important;
 }
 
-.badge-subtitle {
+.timeline-phase {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 0.95rem;
-  color: var(--logo-cream);
-  opacity: 0.85;
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
-/* Responsive adjustments */
-@media (max-width: 960px) {
-  .story-content-wrapper {
-    grid-template-columns: 1fr;
-    text-align: center;
+.timeline-heading {
+  font-family: var(--font-prime) !important;
+  font-size: 1.55rem;
+  font-weight: 300 !important;
+  letter-spacing: 1.5px;
+  color: var(--logo-cream);
+  text-transform: uppercase;
+  margin-bottom: 0.85rem;
+}
+
+.timeline-desc {
+  color: var(--text-muted);
+  font-size: 0.96rem;
+  line-height: 1.7;
+}
+
+.timeline-card-media {
+  margin-top: 1.2rem;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  height: 140px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+}
+
+.timeline-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.timeline-step:hover .timeline-card-media img {
+  transform: scale(1.06);
+}
+
+.timeline-card-badge {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background: rgba(14, 16, 15, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #FFF9E6;
+  font-family: var(--font-prime) !important;
+  font-size: 0.72rem;
+  font-weight: 300 !important;
+  letter-spacing: 1px;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+/* Brand Crest Footer */
+.story-signature-crest {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: 5rem;
+  text-align: center;
+}
+
+.story-crest-logo-wrap {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-gold);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.story-crest-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
+}
+
+.signature-motto {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.55rem;
+  color: var(--logo-yellow);
+  letter-spacing: 1px;
+}
+
+@media (max-width: 860px) {
+  .story-timeline-container::before {
+    left: 24px;
   }
-  .story-text-col {
-    align-items: center;
+  .timeline-step {
+    justify-content: flex-end !important;
+    margin-bottom: 3rem;
   }
-  .story-signature {
-    border-left: none;
-    border-top: 3px solid var(--logo-yellow);
-    padding-left: 0;
-    padding-top: 0.8rem;
+  .timeline-node {
+    left: 24px;
   }
-  .story-title {
+  .timeline-card {
+    width: calc(100% - 64px);
+    padding: 1.6rem 1.8rem;
+  }
+  .story-main-title {
     font-size: 2.8rem;
+  }
+  .story-section {
+    padding: 3.5rem 1.2rem;
   }
 }
