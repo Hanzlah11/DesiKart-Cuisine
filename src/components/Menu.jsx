@@ -10,6 +10,9 @@ const Menu = ({ onAddToCart }) => {
   const canvasRef = useRef(null);
   const dropdownRef = useRef(null);
 
+  // Filter out all locked / coming soon items
+  const availableDishes = menuItems.filter(item => !item.isLocked);
+
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -141,37 +144,33 @@ const Menu = ({ onAddToCart }) => {
     };
   }, []);
 
-  const activeCategoryLabel = menuCategories.find(c => c.id === activeCategory)?.label || 'All Specialties';
+  // Only keep category tabs that currently have active, available dishes
+  const activeCategories = menuCategories.filter(cat => {
+    if (cat.id === 'all') return true;
+    return availableDishes.some(dish => dish.category === cat.id);
+  });
 
-  // Specific categorized sections to render when "All" is active
+  const activeCategoryLabel = activeCategories.find(c => c.id === activeCategory)?.label || 'All Specialties';
+
   const sectionsToRender = activeCategory === 'all'
-    ? menuCategories.filter(cat => cat.id !== 'all')
-    : menuCategories.filter(cat => cat.id === activeCategory);
+    ? activeCategories.filter(cat => cat.id !== 'all')
+    : activeCategories.filter(cat => cat.id === activeCategory);
 
   const renderDishCard = (dish, index) => {
-    const handleCardClick = () => {
-      if (dish.isLocked) return;
-      setSelectedDish(dish);
-    };
-
     return (
       <div 
         key={dish.id} 
-        className={`dish-card animate-fade-in ${dish.isLocked ? 'locked-dish-card' : ''}`}
+        className="dish-card animate-fade-in"
         style={{ animationDelay: `${index * 0.03}s` }}
-        onClick={handleCardClick}
+        onClick={() => setSelectedDish(dish)}
       >
         <div className="dish-img-container">
-          {dish.isLocked ? (
-            <div className="locked-image-overlay">
-              <span className="locked-badge-pill">🔒 COMING SOON</span>
-            </div>
-          ) : dish.badge ? (
+          {dish.badge && (
             <span className={`dish-badge ${dish.badge.toLowerCase().includes('special') || dish.badge.toLowerCase().includes('signature') ? 'yellow' : 'red'}`}>
               {dish.badge}
             </span>
-          ) : null}
-          <img src={dish.image} alt={dish.name} className={dish.isLocked ? 'locked-img' : ''} />
+          )}
+          <img src={dish.image} alt={dish.name} />
           <span className="serving-pill">{dish.serving}</span>
         </div>
 
@@ -181,27 +180,16 @@ const Menu = ({ onAddToCart }) => {
           <p className="dish-desc">{dish.description}</p>
           <div className="dish-footer">
             <span className="dish-price">{formatPrice(dish.price)}</span>
-            
-            {dish.isLocked ? (
-              <button 
-                type="button"
-                className="add-cart-btn locked-btn"
-                disabled
-              >
-                COMING SOON
-              </button>
-            ) : (
-              <button 
-                type="button"
-                className="add-cart-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (onAddToCart) onAddToCart(dish);
-                }}
-              >
-                ADD TO ORDER
-              </button>
-            )}
+            <button 
+              type="button"
+              className="add-cart-btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (onAddToCart) onAddToCart(dish);
+              }}
+            >
+              ADD TO ORDER
+            </button>
           </div>
         </div>
       </div>
@@ -221,7 +209,7 @@ const Menu = ({ onAddToCart }) => {
         {/* Desktop Sticky Tabs */}
         <div className="menu-sub-navbar">
           <div className="sub-nav-container">
-            {menuCategories.map((cat) => (
+            {activeCategories.map((cat) => (
               <button
                 key={cat.id}
                 type="button"
@@ -234,7 +222,7 @@ const Menu = ({ onAddToCart }) => {
           </div>
         </div>
 
-        {/* Mobile "EXPLORE OUR MENU" Dropdown Accordion */}
+        {/* Mobile Dropdown Accordion */}
         <div className="mobile-category-dropdown-wrapper" ref={dropdownRef}>
           <button
             type="button"
@@ -251,7 +239,7 @@ const Menu = ({ onAddToCart }) => {
 
           {dropdownOpen && (
             <div className="mobile-category-dropdown-list">
-              {menuCategories.map((cat) => (
+              {activeCategories.map((cat) => (
                 <button
                   key={cat.id}
                   type="button"
@@ -272,7 +260,7 @@ const Menu = ({ onAddToCart }) => {
         {/* Categorized Subsections */}
         <div className="menu-sections-container">
           {sectionsToRender.map((category) => {
-            const categoryDishes = menuItems.filter(item => item.category === category.id);
+            const categoryDishes = availableDishes.filter(item => item.category === category.id);
             if (categoryDishes.length === 0) return null;
 
             return (

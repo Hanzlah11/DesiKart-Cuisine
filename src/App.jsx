@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Menu from './components/Menu';
@@ -23,6 +23,11 @@ import {
   signOut 
 } from './firebase';
 import { generateAndDownloadInvoice } from './utils/invoiceGenerator';
+import { 
+  KITCHEN_COORDS, 
+  calculateDistanceKm, 
+  getDeliveryFeeFromDistance 
+} from './utils/deliveryCalculator';
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
@@ -31,6 +36,44 @@ function App() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [userData, setUserData] = useState(null);
+
+  const [isLocationAllowed, setIsLocationAllowed] = useState(false);
+  const [locationError, setLocationError] = useState(null);
+  const [deliveryDistanceKm, setDeliveryDistanceKm] = useState(null);
+  const [deliveryFee, setDeliveryFee] = useState(0);
+
+  const requestLocationAccess = useCallback(() => {
+    if (!("geolocation" in navigator)) {
+      setLocationError('NOT_SUPPORTED');
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        const dist = calculateDistanceKm(KITCHEN_COORDS.lat, KITCHEN_COORDS.lng, lat, lng);
+        setDeliveryDistanceKm(dist);
+        setDeliveryFee(getDeliveryFeeFromDistance(dist));
+        setIsLocationAllowed(true);
+        setLocationError(null);
+      },
+      (error) => {
+        if (error.code === error.PERMISSION_DENIED) {
+          setLocationError('PERMISSION_DENIED');
+        } else {
+          setLocationError('UNAVAILABLE');
+        }
+        setIsLocationAllowed(false);
+        setDeliveryDistanceKm(null);
+      },
+      { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
+    );
+  }, []);
+
+  useEffect(() => {
+    requestLocationAccess();
+  }, [requestLocationAccess]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -86,6 +129,10 @@ function App() {
   };
 
   const handleCheckoutClick = () => {
+    if (!isLocationAllowed) {
+      requestLocationAccess();
+      return;
+    }
     if (!currentUser || !userData) {
       setIsAuthModalOpen(true);
     } else {
@@ -94,7 +141,7 @@ function App() {
   };
 
   const handleDirectCustomerInvoice = () => {
-    if (cartItems.length === 0) return;
+    if (cartItems.length === 0 || !isLocationAllowed) return;
 
     if (!currentUser || !userData) {
       setIsAuthModalOpen(true);
@@ -102,7 +149,6 @@ function App() {
     }
 
     const subtotal = cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0);
-    const deliveryFee = 200;
     const total = subtotal + deliveryFee;
     const orderId = Date.now().toString().slice(-6);
 
@@ -114,14 +160,13 @@ function App() {
       items: cartItems,
       subtotal,
       deliveryFee,
+      distanceKm: deliveryDistanceKm,
       total
     };
 
-    // 1. Download PDF to device
     generateAndDownloadInvoice(orderPayload);
 
-    // 2. Format invoice text for customer's WhatsApp
-    let message = `*DESIKART CUISINE - INVOICE RECEIPT*\n`;
+    let message = `🧾 *DESIKART CUISINE - INVOICE RECEIPT*\n`;
     message += `*Invoice Ref:* #${orderId}\n`;
     message += `*Customer:* ${orderPayload.customerName}\n`;
     message += `*Date:* ${new Date().toLocaleDateString()}\n\n`;
@@ -132,12 +177,11 @@ function App() {
     });
 
     message += `\n*Subtotal:* Rs. ${subtotal}`;
-    message += `\n*Delivery Fee:* Rs. ${deliveryFee}`;
+    message += `\n*Delivery Fee:* Rs. ${deliveryFee}${deliveryDistanceKm !== null ? ` (${Number(deliveryDistanceKm).toFixed(1)} km)` : ''}`;
     message += `\n*Total Paid/Due:* Rs. ${total}`;
-    message += `\n\n_A PDF copy of this invoice has been downloaded to your device._`;
+    message += `\n\n📄 _A PDF copy of this invoice has been downloaded to your device._`;
     message += `\nThank you for choosing DesiKart Cuisine!`;
 
-    // 3. Format customer phone
     let cleanPhone = (orderPayload.phone || "").replace(/[^0-9]/g, "");
     if (cleanPhone.startsWith("0")) {
       cleanPhone = "92" + cleanPhone.slice(1);
@@ -152,10 +196,9 @@ function App() {
   };
 
   const executeRestaurantWhatsAppCheckout = async (profile) => {
-    if (cartItems.length === 0) return;
+    if (cartItems.length === 0 || !isLocationAllowed) return;
 
     const subtotal = cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0);
-    const deliveryFee = 200;
     const total = subtotal + deliveryFee;
     const orderTimestampId = Date.now().toString().slice(-6);
 
@@ -167,22 +210,20 @@ function App() {
       items: cartItems,
       subtotal,
       deliveryFee,
+      distanceKm: deliveryDistanceKm,
       total,
       status: "pending",
       createdAt: serverTimestamp()
     };
 
-    // 1. Log to Firestore
     try {
       await addDoc(collection(db, "orders"), orderPayload);
     } catch (err) {
       console.error("Firestore Order Log Error:", err);
     }
 
-    // 2. Download PDF Invoice
     generateAndDownloadInvoice(orderPayload);
 
-    // 3. Send Order to Restaurant WhatsApp
     let message = `*New Order Placed - DesiKart Cuisine*\n`;
     message += `*Order Ref:* #${orderTimestampId}\n\n`;
     message += `*Customer Name:* ${orderPayload.customerName}\n`;
@@ -195,7 +236,7 @@ function App() {
     });
 
     message += `\n*Subtotal:* Rs. ${subtotal}`;
-    message += `\n*Delivery Fee:* Rs. ${deliveryFee}`;
+    message += `\n*Delivery Fee:* Rs. ${deliveryFee}${deliveryDistanceKm !== null ? ` (~${Number(deliveryDistanceKm).toFixed(1)} km)` : ''}`;
     message += `\n*Total Amount:* Rs. ${total}`;
     message += `\n\n📄 _PDF Invoice has been auto-generated & saved to customer device._`;
     message += `\n\nPlease confirm my order!`;
@@ -213,12 +254,12 @@ function App() {
   };
 
   const totalCartCount = cartItems.reduce((acc, item) => acc + (item.quantity || 1), 0);
-  const totalCartAmount = cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0) + (cartItems.length > 0 ? 200 : 0);
+  const totalCartAmount = cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0) + (cartItems.length > 0 && isLocationAllowed ? deliveryFee : 0);
 
   return (
     <div className="app">
       <Header 
-        cartCount={totalCartCount} 
+        cartCount={totalCartCount}
         onCartClick={() => setIsCartOpen(true)}
         currentUser={currentUser}
         userData={userData}
@@ -278,6 +319,11 @@ function App() {
         isOpen={isCartOpen} 
         onClose={() => setIsCartOpen(false)} 
         cartItems={cartItems}
+        deliveryFee={deliveryFee}
+        distanceKm={deliveryDistanceKm}
+        isLocationAllowed={isLocationAllowed}
+        locationError={locationError}
+        onRequestLocation={requestLocationAccess}
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
         onAddToCart={handleAddToCart}
