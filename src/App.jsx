@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Menu from './components/Menu';
@@ -7,6 +7,7 @@ import Story from './components/Story';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
+import LocationPickerModal from './components/LocationPickerModal';
 import EmailAuthModal from './components/EmailAuthModal';
 import UserProfileModal from './components/UserProfileModal';
 import AiAssistant from './components/AiAssistant';
@@ -23,57 +24,19 @@ import {
   signOut 
 } from './firebase';
 import { generateAndDownloadInvoice } from './utils/invoiceGenerator';
-import { 
-  KITCHEN_COORDS, 
-  calculateDistanceKm, 
-  getDeliveryFeeFromDistance 
-} from './utils/deliveryCalculator';
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isLocationPickerOpen, setIsLocationPickerOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [userData, setUserData] = useState(null);
 
-  const [isLocationAllowed, setIsLocationAllowed] = useState(false);
-  const [locationError, setLocationError] = useState(null);
+  const [deliveryAddress, setDeliveryAddress] = useState('');
   const [deliveryDistanceKm, setDeliveryDistanceKm] = useState(null);
   const [deliveryFee, setDeliveryFee] = useState(0);
-
-  const requestLocationAccess = useCallback(() => {
-    if (!("geolocation" in navigator)) {
-      setLocationError('NOT_SUPPORTED');
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        const dist = calculateDistanceKm(KITCHEN_COORDS.lat, KITCHEN_COORDS.lng, lat, lng);
-        setDeliveryDistanceKm(dist);
-        setDeliveryFee(getDeliveryFeeFromDistance(dist));
-        setIsLocationAllowed(true);
-        setLocationError(null);
-      },
-      (error) => {
-        if (error.code === error.PERMISSION_DENIED) {
-          setLocationError('PERMISSION_DENIED');
-        } else {
-          setLocationError('UNAVAILABLE');
-        }
-        setIsLocationAllowed(false);
-        setDeliveryDistanceKm(null);
-      },
-      { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
-    );
-  }, []);
-
-  useEffect(() => {
-    requestLocationAccess();
-  }, [requestLocationAccess]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -96,6 +59,12 @@ function App() {
 
     return () => unsubscribe();
   }, []);
+
+  const handleLocationConfirmed = ({ address, coords, distanceKm, deliveryFee }) => {
+    setDeliveryAddress(address);
+    setDeliveryDistanceKm(distanceKm);
+    setDeliveryFee(deliveryFee);
+  };
 
   const handleAddToCart = (dish) => {
     setCartItems((prevItems) => {
@@ -129,8 +98,8 @@ function App() {
   };
 
   const handleCheckoutClick = () => {
-    if (!isLocationAllowed) {
-      requestLocationAccess();
+    if (!deliveryAddress || deliveryDistanceKm === null) {
+      setIsLocationPickerOpen(true);
       return;
     }
     if (!currentUser || !userData) {
@@ -141,7 +110,7 @@ function App() {
   };
 
   const handleDirectCustomerInvoice = () => {
-    if (cartItems.length === 0 || !isLocationAllowed) return;
+    if (cartItems.length === 0 || !deliveryAddress) return;
 
     if (!currentUser || !userData) {
       setIsAuthModalOpen(true);
@@ -157,6 +126,7 @@ function App() {
       customerName: userData?.name || "Valued Customer",
       phone: userData?.phone || "",
       email: userData?.email || currentUser?.email || "",
+      address: deliveryAddress,
       items: cartItems,
       subtotal,
       deliveryFee,
@@ -169,6 +139,7 @@ function App() {
     let message = `🧾 *DESIKART CUISINE - INVOICE RECEIPT*\n`;
     message += `*Invoice Ref:* #${orderId}\n`;
     message += `*Customer:* ${orderPayload.customerName}\n`;
+    message += `*Address:* ${deliveryAddress}\n`;
     message += `*Date:* ${new Date().toLocaleDateString()}\n\n`;
     message += `*Order Breakdown:*\n`;
 
@@ -196,7 +167,7 @@ function App() {
   };
 
   const executeRestaurantWhatsAppCheckout = async (profile) => {
-    if (cartItems.length === 0 || !isLocationAllowed) return;
+    if (cartItems.length === 0 || !deliveryAddress) return;
 
     const subtotal = cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0);
     const total = subtotal + deliveryFee;
@@ -207,6 +178,7 @@ function App() {
       customerName: profile.name || "Customer",
       phone: profile.phone || "N/A",
       email: profile.email || currentUser?.email || "N/A",
+      address: deliveryAddress,
       items: cartItems,
       subtotal,
       deliveryFee,
@@ -228,7 +200,7 @@ function App() {
     message += `*Order Ref:* #${orderTimestampId}\n\n`;
     message += `*Customer Name:* ${orderPayload.customerName}\n`;
     message += `*Phone:* ${orderPayload.phone}\n`;
-    message += `*Email:* ${orderPayload.email}\n\n`;
+    message += `*Delivery Address:* ${deliveryAddress}\n\n`;
     message += `*Items Ordered:*\n`;
     
     cartItems.forEach((item, index) => {
@@ -253,8 +225,9 @@ function App() {
     }
   };
 
+  const isLocationSelected = Boolean(deliveryAddress && deliveryDistanceKm !== null);
   const totalCartCount = cartItems.reduce((acc, item) => acc + (item.quantity || 1), 0);
-  const totalCartAmount = cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0) + (cartItems.length > 0 && isLocationAllowed ? deliveryFee : 0);
+  const totalCartAmount = cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0) + (cartItems.length > 0 && isLocationSelected ? deliveryFee : 0);
 
   return (
     <div className="app">
@@ -321,14 +294,19 @@ function App() {
         cartItems={cartItems}
         deliveryFee={deliveryFee}
         distanceKm={deliveryDistanceKm}
-        isLocationAllowed={isLocationAllowed}
-        locationError={locationError}
-        onRequestLocation={requestLocationAccess}
+        deliveryAddress={deliveryAddress}
+        onOpenLocationPicker={() => setIsLocationPickerOpen(true)}
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
         onAddToCart={handleAddToCart}
         onCheckout={handleCheckoutClick}
         onDownloadInvoice={handleDirectCustomerInvoice}
+      />
+
+      <LocationPickerModal 
+        isOpen={isLocationPickerOpen}
+        onClose={() => setIsLocationPickerOpen(false)}
+        onLocationConfirmed={handleLocationConfirmed}
       />
 
       <EmailAuthModal 

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { formatPrice } from '../data/menu';
 import './CartDrawer.css';
 
@@ -12,11 +12,10 @@ const CartDrawer = ({
   isOpen, 
   onClose, 
   cartItems, 
-  deliveryFee = 250,
+  deliveryFee = 0,
   distanceKm = null,
-  isLocationAllowed = false,
-  locationError = null,
-  onRequestLocation,
+  deliveryAddress = '',
+  onOpenLocationPicker,
   onUpdateQuantity, 
   onRemoveItem, 
   onAddToCart,
@@ -24,7 +23,7 @@ const CartDrawer = ({
   onDownloadInvoice
 }) => {
   const canvasRef = useRef(null);
-  const [showHelpModal, setShowHelpModal] = useState(false);
+  const isLocationSelected = Boolean(deliveryAddress && distanceKm !== null);
 
   const handleAddMoreItems = () => {
     onClose();
@@ -144,15 +143,7 @@ const CartDrawer = ({
   if (!isOpen) return null;
 
   const subtotal = cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0);
-  const total = subtotal + (cartItems.length > 0 && isLocationAllowed ? deliveryFee : 0);
-
-  const handleLocationButtonClick = () => {
-    if (locationError === 'PERMISSION_DENIED') {
-      setShowHelpModal(true);
-    } else {
-      onRequestLocation();
-    }
-  };
+  const total = subtotal + (cartItems.length > 0 && isLocationSelected ? deliveryFee : 0);
 
   return (
     <div className="cart-drawer-backdrop" onClick={onClose}>
@@ -257,25 +248,18 @@ const CartDrawer = ({
 
         {cartItems.length > 0 && (
           <div className="cart-footer">
-            {!isLocationAllowed && (
-              <div className="location-alert-box">
-                <div className="location-alert-text">
-                  <span>📍</span>
-                  <span>
-                    {locationError === 'PERMISSION_DENIED'
-                      ? 'Location blocked in browser settings.'
-                      : 'Enable location to calculate delivery fee.'}
-                  </span>
+            <div className="cart-loc-select-box" onClick={onOpenLocationPicker}>
+              <div className="cart-loc-select-left">
+                <span>📍</span>
+                <div className="cart-loc-text">
+                  <strong>{deliveryAddress ? 'Deliver to:' : 'Select Delivery Location'}</strong>
+                  <p>{deliveryAddress || 'Tap to search sector, landmark or street'}</p>
                 </div>
-                <button 
-                  type="button" 
-                  className="location-retry-btn" 
-                  onClick={handleLocationButtonClick}
-                >
-                  {locationError === 'PERMISSION_DENIED' ? 'HOW TO ENABLE' : 'ALLOW LOCATION'}
-                </button>
               </div>
-            )}
+              <button type="button" className="cart-loc-change-btn">
+                {deliveryAddress ? 'Change' : 'Select'}
+              </button>
+            </div>
 
             <div className="cart-summary-row">
               <span>Subtotal</span>
@@ -285,13 +269,13 @@ const CartDrawer = ({
             <div className="cart-summary-row">
               <span>
                 Estimated Delivery 
-                {isLocationAllowed && distanceKm !== null && distanceKm !== undefined ? (
+                {isLocationSelected && (
                   <small style={{ color: 'var(--logo-yellow)', marginLeft: '6px' }}>
                     ({Number(distanceKm).toFixed(1)} km)
                   </small>
-                ) : null}
+                )}
               </span>
-              <strong>{isLocationAllowed ? formatPrice(deliveryFee) : 'Location Needed'}</strong>
+              <strong>{isLocationSelected ? formatPrice(deliveryFee) : 'Select Location'}</strong>
             </div>
 
             <div className="cart-summary-row total-row">
@@ -308,7 +292,7 @@ const CartDrawer = ({
                 type="button" 
                 className="invoice-download-btn" 
                 onClick={onDownloadInvoice}
-                disabled={!isLocationAllowed}
+                disabled={!isLocationSelected}
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -322,11 +306,11 @@ const CartDrawer = ({
 
             <button 
               type="button" 
-              className={`whatsapp-checkout-btn ${!isLocationAllowed ? 'locked-checkout-btn' : ''}`} 
-              onClick={isLocationAllowed ? onCheckout : handleLocationButtonClick}
+              className={`whatsapp-checkout-btn ${!isLocationSelected ? 'locked-checkout-btn' : ''}`} 
+              onClick={isLocationSelected ? onCheckout : onOpenLocationPicker}
             >
-              <span>{isLocationAllowed ? 'ORDER VIA WHATSAPP' : '🔒 ALLOW LOCATION TO ORDER'}</span>
-              {isLocationAllowed && (
+              <span>{isLocationSelected ? 'ORDER VIA WHATSAPP' : '📍 SELECT LOCATION TO ORDER'}</span>
+              {isLocationSelected && (
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.74.46 3.42 1.34 4.9L2 22l5.35-1.42c1.42.78 3.05 1.2 4.69 1.2 5.46 0 9.9-4.44 9.9-9.9 0-5.46-4.44-9.9-9.9-9.9zm0 18c-1.42 0-2.8-.38-4-1.08l-.29-.17-3.03.8.81-2.95-.19-.31C4.7 14.86 4.24 13.46 4.24 12c0-4.3 3.5-7.8 7.8-7.8s7.8 3.5 7.8 7.8-3.5 7.8-7.8 7.8zm4.36-5.83c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.01-.37-1.93-1.19-.71-.63-1.19-1.41-1.33-1.65-.14-.24-.01-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.31-.74-1.79-.2-.47-.4-.41-.54-.42l-.46-.01c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.34.98 2.5c.12.16 1.7 2.6 4.12 3.65.58.25 1.03.4 1.38.51.58.18 1.11.15 1.53.09.47-.07 1.42-.58 1.62-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28z"/>
                 </svg>
@@ -336,32 +320,6 @@ const CartDrawer = ({
         )}
 
       </div>
-
-      {/* Permission Unblock Help Popup */}
-      {showHelpModal && (
-        <div className="location-help-backdrop" onClick={() => setShowHelpModal(false)}>
-          <div className="location-help-modal" onClick={(e) => e.stopPropagation()}>
-            <h4>📍 How to Enable Location</h4>
-            <p>Location permission was previously blocked for this website in your browser.</p>
-            <ol>
-              <li>Tap the <strong>Padlock / Tune icon (🔒 / ⚙️)</strong> in your browser's address bar.</li>
-              <li>Tap <strong>Permissions</strong> or <strong>Site settings</strong>.</li>
-              <li>Set <strong>Location</strong> to <strong>Allow</strong>.</li>
-              <li>Refresh the page or click below to retry.</li>
-            </ol>
-            <button 
-              type="button" 
-              className="location-help-btn"
-              onClick={() => {
-                setShowHelpModal(false);
-                onRequestLocation();
-              }}
-            >
-              I Allowed It, Retry Now
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
