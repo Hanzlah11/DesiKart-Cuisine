@@ -24,6 +24,7 @@ import {
   signOut 
 } from './firebase';
 import { generateAndDownloadInvoice } from './utils/invoiceGenerator';
+import { openWhatsApp } from './utils/whatsappRedirect';
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
@@ -109,64 +110,7 @@ function App() {
     }
   };
 
-  const handleDirectCustomerInvoice = () => {
-    if (cartItems.length === 0 || !deliveryAddress) return;
-
-    if (!currentUser || !userData) {
-      setIsAuthModalOpen(true);
-      return;
-    }
-
-    const subtotal = cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0);
-    const total = subtotal + deliveryFee;
-    const orderId = Date.now().toString().slice(-6);
-
-    const orderPayload = {
-      orderId,
-      customerName: userData?.name || "Valued Customer",
-      phone: userData?.phone || "",
-      email: userData?.email || currentUser?.email || "",
-      address: deliveryAddress,
-      items: cartItems,
-      subtotal,
-      deliveryFee,
-      distanceKm: deliveryDistanceKm,
-      total
-    };
-
-    generateAndDownloadInvoice(orderPayload);
-
-    let message = `🧾 *DESIKART CUISINE - INVOICE RECEIPT*\n`;
-    message += `*Invoice Ref:* #${orderId}\n`;
-    message += `*Customer:* ${orderPayload.customerName}\n`;
-    message += `*Address:* ${deliveryAddress}\n`;
-    message += `*Date:* ${new Date().toLocaleDateString()}\n\n`;
-    message += `*Order Breakdown:*\n`;
-
-    cartItems.forEach((item, index) => {
-      message += `${index + 1}. ${item.name} (${item.serving || 'Standard'}) x${item.quantity || 1} — Rs. ${item.price * (item.quantity || 1)}\n`;
-    });
-
-    message += `\n*Subtotal:* Rs. ${subtotal}`;
-    message += `\n*Delivery Fee:* Rs. ${deliveryFee}${deliveryDistanceKm !== null ? ` (${Number(deliveryDistanceKm).toFixed(1)} km)` : ''}`;
-    message += `\n*Total Paid/Due:* Rs. ${total}`;
-    message += `\n\n📄 _A PDF copy of this invoice has been downloaded to your device._`;
-    message += `\nThank you for choosing DesiKart Cuisine!`;
-
-    let cleanPhone = (orderPayload.phone || "").replace(/[^0-9]/g, "");
-    if (cleanPhone.startsWith("0")) {
-      cleanPhone = "92" + cleanPhone.slice(1);
-    }
-
-    const encodedMessage = encodeURIComponent(message);
-    if (cleanPhone) {
-      window.open(`https://wa.me/${cleanPhone}?text=${encodedMessage}`, '_blank');
-    } else {
-      window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
-    }
-  };
-
-  const executeRestaurantWhatsAppCheckout = async (profile) => {
+  const executeRestaurantWhatsAppCheckout = (profile) => {
     if (cartItems.length === 0 || !deliveryAddress) return;
 
     const subtotal = cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0);
@@ -188,13 +132,15 @@ function App() {
       createdAt: serverTimestamp()
     };
 
-    try {
-      await addDoc(collection(db, "orders"), orderPayload);
-    } catch (err) {
+    addDoc(collection(db, "orders"), orderPayload).catch((err) => {
       console.error("Firestore Order Log Error:", err);
-    }
+    });
 
-    generateAndDownloadInvoice(orderPayload);
+    try {
+      generateAndDownloadInvoice(orderPayload);
+    } catch (e) {
+      console.error("PDF generation failed:", e);
+    }
 
     let message = `*New Order Placed - DesiKart Cuisine*\n`;
     message += `*Order Ref:* #${orderTimestampId}\n\n`;
@@ -213,8 +159,7 @@ function App() {
     message += `\n\n📄 _PDF Invoice has been auto-generated & saved to customer device._`;
     message += `\n\nPlease confirm my order!`;
 
-    const encodedMessage = encodeURIComponent(message);
-    window.open(`https://wa.me/923115077779?text=${encodedMessage}`, '_blank');
+    openWhatsApp("923115077779", message);
   };
 
   const handleSignOut = async () => {
@@ -300,7 +245,6 @@ function App() {
         onRemoveItem={handleRemoveItem}
         onAddToCart={handleAddToCart}
         onCheckout={handleCheckoutClick}
-        onDownloadInvoice={handleDirectCustomerInvoice}
       />
 
       <LocationPickerModal 
