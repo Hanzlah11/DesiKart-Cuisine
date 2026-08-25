@@ -26,7 +26,7 @@ export const calculateDistanceKm = (lat1, lon1, lat2, lon2) => {
 };
 
 export const getDeliveryFeeFromDistance = (distanceKm) => {
-  if (distanceKm === null || distanceKm === undefined) return 250;
+  if (distanceKm === null || distanceKm === undefined) return 0;
   if (distanceKm <= 2.5) return 0;
   if (distanceKm <= 5.0) return 250;
   if (distanceKm <= 7.5) return 500;

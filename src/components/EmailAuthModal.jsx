@@ -77,7 +77,7 @@ const EmailAuthModal = ({ isOpen, onClose, onSuccess }) => {
                   value={name} 
                   onChange={(e) => setName(e.target.value)} 
                   required 
-                  placeholder="e.g. Hanzlah Imran"
+                  placeholder="e.g. Mubashir Iqbal"
                 />
               </div>
               <div className="form-group">
@@ -87,7 +87,7 @@ const EmailAuthModal = ({ isOpen, onClose, onSuccess }) => {
                   value={phone} 
                   onChange={(e) => setPhone(e.target.value)} 
                   required 
-                  placeholder="e.g. +923316667054"
+                  placeholder="e.g. +92123456789"
                 />
               </div>
             </>
