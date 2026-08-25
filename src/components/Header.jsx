@@ -56,7 +56,7 @@ const Header = ({
     <header className={`cinematic-navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="nav-container">
         <a href="#hero" onClick={handleLogoClick} className="brand-group">
-          <img src="/images/brand/desikart-logo.png" alt="Desikart Logo" className="nav-logo" />
+          <img src="/images/brand/desikart-logo-withbg.jpeg" alt="Desikart Logo" className="nav-logo" />
           <span className="brand-text">DESI<span className="text-red">KART</span></span>
         </a>
 

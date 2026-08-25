@@ -185,7 +185,7 @@ const Footer = () => {
           
           <div className="footer-col brand-col">
             <div className="footer-brand-group">
-              <img src="/images/brand/desikart-logo.png" alt="Desikart Logo" className="footer-logo" />
+              <img src="/images/brand/desikart-logo-withbg.jpeg" alt="Desikart Logo" className="footer-logo" />
               <span className="footer-brand-text">DESI<span className="text-red">KART</span></span>
             </div>
             <p className="footer-bio">
