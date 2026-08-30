@@ -144,10 +144,10 @@ const Menu = ({ onAddToCart }) => {
     };
   }, []);
 
-  // Only keep category tabs that currently have active, available dishes
+  // Filter categories with active dishes
   const activeCategories = menuCategories.filter(cat => {
     if (cat.id === 'all') return true;
-    return availableDishes.some(dish => dish.category === cat.id);
+    return availableDishes.some(dish => dish.categories && dish.categories.includes(cat.id));
   });
 
   const activeCategoryLabel = activeCategories.find(c => c.id === activeCategory)?.label || 'All Specialties';
@@ -157,6 +157,12 @@ const Menu = ({ onAddToCart }) => {
     : activeCategories.filter(cat => cat.id === activeCategory);
 
   const renderDishCard = (dish, index) => {
+    const complimentaryList = Array.isArray(dish.complimentary)
+      ? dish.complimentary
+      : typeof dish.complimentary === 'string'
+      ? dish.complimentary.split(',').map((s) => s.trim())
+      : [];
+
     return (
       <div 
         key={dish.id} 
@@ -175,9 +181,20 @@ const Menu = ({ onAddToCart }) => {
         </div>
 
         <div className="dish-info-card">
-          <span className="dish-category-label">{dish.categoryLabel}</span>
           <h3 className="dish-title">{dish.name}</h3>
           <p className="dish-desc">{dish.description}</p>
+
+          {complimentaryList.length > 0 && (
+            <div className="dish-card-includes-row">
+              <span className="dish-includes-label">Includes:</span>
+              <div className="dish-includes-pills">
+                {complimentaryList.map((comp, idx) => (
+                  <span key={idx} className="dish-inc-pill">✓ {comp}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="dish-footer">
             <span className="dish-price">{formatPrice(dish.price)}</span>
             <button 
@@ -260,7 +277,9 @@ const Menu = ({ onAddToCart }) => {
         {/* Categorized Subsections */}
         <div className="menu-sections-container">
           {sectionsToRender.map((category) => {
-            const categoryDishes = availableDishes.filter(item => item.category === category.id);
+            const categoryDishes = availableDishes.filter(item => 
+              item.categories && item.categories.includes(category.id)
+            );
             if (categoryDishes.length === 0) return null;
 
             return (

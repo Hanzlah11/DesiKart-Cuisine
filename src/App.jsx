@@ -23,7 +23,6 @@ import {
   onAuthStateChanged, 
   signOut 
 } from './firebase';
-import { generateAndDownloadInvoice } from './utils/invoiceGenerator';
 import { openWhatsApp } from './utils/whatsappRedirect';
 
 function App() {
@@ -132,16 +131,12 @@ function App() {
       createdAt: serverTimestamp()
     };
 
+    // Log to Firestore in the background
     addDoc(collection(db, "orders"), orderPayload).catch((err) => {
       console.error("Firestore Order Log Error:", err);
     });
 
-    try {
-      generateAndDownloadInvoice(orderPayload);
-    } catch (e) {
-      console.error("PDF generation failed:", e);
-    }
-
+    // Format WhatsApp message without invoice auto-download
     let message = `*New Order Placed - DesiKart Cuisine*\n`;
     message += `*Order Ref:* #${orderTimestampId}\n\n`;
     message += `*Customer Name:* ${orderPayload.customerName}\n`;
@@ -156,7 +151,6 @@ function App() {
     message += `\n*Subtotal:* Rs. ${subtotal}`;
     message += `\n*Delivery Fee:* Rs. ${deliveryFee}${deliveryDistanceKm !== null ? ` (~${Number(deliveryDistanceKm).toFixed(1)} km)` : ''}`;
     message += `\n*Total Amount:* Rs. ${total}`;
-    message += `\n\n📄 _PDF Invoice has been auto-generated & saved to customer device._`;
     message += `\n\nPlease confirm my order!`;
 
     openWhatsApp("923115077779", message);

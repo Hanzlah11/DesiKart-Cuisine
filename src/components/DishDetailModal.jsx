@@ -145,8 +145,11 @@ const DishDetailModal = ({ dish, isOpen, onClose, onAddToCart }) => {
 
   if (!isOpen || !dish) return null;
 
-  const isFamily = dish.category === 'family-deals' || dish.serving?.toLowerCase().includes('family');
-  const isAddonCategory = dish.category === 'addons';
+  const complimentaryList = Array.isArray(dish.complimentary)
+    ? dish.complimentary
+    : typeof dish.complimentary === 'string'
+    ? dish.complimentary.split(',').map((s) => s.trim())
+    : [];
 
   const handleUpdateAddonQty = (addonId, delta) => {
     setSelectedAddons((prev) => {
@@ -207,28 +210,18 @@ const DishDetailModal = ({ dish, isOpen, onClose, onAddToCart }) => {
             <p className="dish-modal-desc">{dish.description}</p>
             <div className="dish-modal-price">{formatPrice(dish.price)}</div>
 
-            {!isAddonCategory && (
+            {complimentaryList.length > 0 && (
               <div className="complimentary-box">
-                <h4 className="complimentary-title">✨ Complimentary Inclusions (Included in Price)</h4>
-                {isFamily ? (
-                  <ul className="complimentary-list">
-                    <li>🥗 1x Fresh Salad (Family Bowl, +50% Extra)</li>
-                    <li>🥣 1x Zeera Raita (Family Bowl, +50% Extra)</li>
-                    <li>🍞 6x Freshly Baked Naans</li>
-                    <li>🥤 1x 1.5 Litre Chilled Soft Drink</li>
-                  </ul>
-                ) : (
-                  <ul className="complimentary-list">
-                    <li>🥗 1x Fresh Salad (Single Portion)</li>
-                    <li>🥣 1x Zeera Raita (Single Portion)</li>
-                    <li>🍞 2x Freshly Baked Naans</li>
-                    <li>🥤 1x 250ml Chilled Soft Drink Can</li>
-                  </ul>
-                )}
+                <h4 className="complimentary-title">Complimentary Inclusions (Included in Price)</h4>
+                <ul className="complimentary-list">
+                  {complimentaryList.map((item, idx) => (
+                    <li key={idx}>✓ {item}</li>
+                  ))}
+                </ul>
               </div>
             )}
 
-            {!isAddonCategory && (
+            {dish.category !== 'addons' && (
               <div className="dish-modal-addons-section">
                 <div className="modal-addons-header-row">
                   <span className="modal-addons-header">Extra Add-ons</span>
