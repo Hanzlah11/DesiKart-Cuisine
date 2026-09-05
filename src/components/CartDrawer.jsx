@@ -3,9 +3,11 @@ import { formatPrice } from '../data/menu';
 import './CartDrawer.css';
 
 const QUICK_ADDONS = [
+  { id: 'plain-naan', name: 'Plain Naan', price: 50, image: '/images/menu/plain_naan.jpeg', serving: 'Add-on' },
   { id: 'roghni-naan', name: 'Roghni Naan', price: 120, image: '/images/menu/roghni_naan.jpeg', serving: 'Add-on' },
-  { id: 'zeera-raita', name: 'Zeera Raita', price: 160, image: '/images/menu/zeera_raita.jpeg', serving: 'Add-on' },
-  { id: 'soft-drink', name: 'Soft Drink 250ml Can', price: 140, image: '/images/menu/soft_drink.jpeg', serving: 'Add-on' }
+  { id: 'extra-nali', name: '1 Nali (Beef)', price: 200, image: '/images/menu/nalli_beef_nihari.jpeg', serving: 'Add-on' },
+  { id: 'zeera-raita', name: 'Zeera Raita (10 oz)', price: 160, image: '/images/menu/zeera_raita.jpeg', serving: 'Add-on' },
+  { id: 'soft-drink', name: 'Soft Drink (250ml Can)', price: 150, image: '/images/menu/soft_drink.jpeg', serving: 'Add-on' }
 ];
 
 const CartDrawer = ({ 
@@ -177,10 +179,10 @@ const CartDrawer = ({
           ) : (
             <>
               {cartItems.map((item) => {
-                const complimentaryList = Array.isArray(item.complimentary || item.includes)
-                  ? (item.complimentary || item.includes)
-                  : typeof (item.complimentary || item.includes) === 'string'
-                  ? (item.complimentary || item.includes).split(',').map(s => s.trim())
+                const complimentaryList = Array.isArray(item.complimentary)
+                  ? item.complimentary
+                  : typeof item.complimentary === 'string'
+                  ? item.complimentary.split(',').map(s => s.trim())
                   : [];
 
                 return (
@@ -247,19 +249,23 @@ const CartDrawer = ({
 
         {cartItems.length > 0 && (
           <div className="cart-footer">
+            {/* Delivery Location Capsule */}
             <div className="cart-loc-select-box" onClick={onOpenLocationPicker}>
               <div className="cart-loc-select-left">
-                <span>📍</span>
+                <span className="cart-loc-pin-icon">📍</span>
                 <div className="cart-loc-text">
-                  <strong>{deliveryAddress ? 'Deliver to:' : 'Select Delivery Location'}</strong>
-                  <p>{deliveryAddress || 'Tap to set sector, house and street'}</p>
+                  <span className="cart-loc-label">DELIVER TO:</span>
+                  <p className="cart-loc-address">
+                    {deliveryAddress || 'Tap to set sector, house and street'}
+                  </p>
                 </div>
               </div>
               <button type="button" className="cart-loc-change-btn">
-                {deliveryAddress ? 'Change' : 'Select'}
+                {deliveryAddress ? 'Change' : 'Set Location'}
               </button>
             </div>
 
+            {/* Price Breakdown */}
             <div className="cart-summary-row">
               <span>Subtotal</span>
               <strong>{formatPrice(subtotal)}</strong>
@@ -269,12 +275,16 @@ const CartDrawer = ({
               <span>
                 Estimated Delivery 
                 {isLocationSelected && (
-                  <small style={{ color: 'var(--logo-yellow)', marginLeft: '6px' }}>
+                  <small className="cart-dist-tag">
                     ({Number(distanceKm).toFixed(1)} km)
                   </small>
                 )}
               </span>
-              <strong>{isLocationSelected ? formatPrice(deliveryFee) : 'Select Location'}</strong>
+              <strong>
+                {isLocationSelected 
+                  ? (deliveryFee === 0 ? <span className="free-delivery-badge">FREE</span> : formatPrice(deliveryFee))
+                  : 'Select Location'}
+              </strong>
             </div>
 
             <div className="cart-summary-row total-row">
@@ -282,22 +292,25 @@ const CartDrawer = ({
               <strong className="text-yellow">{formatPrice(total)}</strong>
             </div>
 
-            <button type="button" className="add-more-btn" onClick={handleAddMoreItems}>
-              <span>+ ADD MORE ITEMS</span>
-            </button>
+            {/* Advance payment notice */}
+            <div className="cart-advance-notice">
+              <span>⚠️ <strong>Advance Payment Only</strong> • No Cash On Delivery</span>
+            </div>
 
-            <button 
-              type="button" 
-              className={`whatsapp-checkout-btn ${!isLocationSelected ? 'locked-checkout-btn' : ''}`} 
-              onClick={isLocationSelected ? onCheckout : onOpenLocationPicker}
-            >
-              <span>{isLocationSelected ? 'PLACE ORDER' : '📍 SELECT LOCATION TO ORDER'}</span>
-              {isLocationSelected && (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.74.46 3.42 1.34 4.9L2 22l5.35-1.42c1.42.78 3.05 1.2 4.69 1.2 5.46 0 9.9-4.44 9.9-9.9 0-5.46-4.44-9.9-9.9-9.9zm0 18c-1.42 0-2.8-.38-4-1.08l-.29-.17-3.03.8.81-2.95-.19-.31C4.7 14.86 4.24 13.46 4.24 12c0-4.3 3.5-7.8 7.8-7.8s7.8 3.5 7.8 7.8-3.5 7.8-7.8 7.8zm4.36-5.83c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.01-.37-1.93-1.19-.71-.63-1.19-1.41-1.33-1.65-.14-.24-.01-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.31-.74-1.79-.2-.47-.4-.41-.54-.42l-.46-.01c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.34.98 2.5c.12.16 1.7 2.6 4.12 3.65.58.25 1.03.4 1.38.51.58.18 1.11.15 1.53.09.47-.07 1.42-.58 1.62-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28z"/>
-                </svg>
-              )}
-            </button>
+            {/* Buttons */}
+            <div className="cart-action-buttons">
+              <button type="button" className="add-more-btn" onClick={handleAddMoreItems}>
+                + ADD MORE ITEMS
+              </button>
+
+              <button 
+                type="button" 
+                className={`place-order-btn ${!isLocationSelected ? 'locked-place-order-btn' : ''}`} 
+                onClick={isLocationSelected ? onCheckout : onOpenLocationPicker}
+              >
+                <span>{isLocationSelected ? 'PLACE ORDER' : '📍 SELECT LOCATION TO ORDER'}</span>
+              </button>
+            </div>
           </div>
         )}
 

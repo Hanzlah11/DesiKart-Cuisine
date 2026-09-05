@@ -25,11 +25,21 @@ export const calculateDistanceKm = (lat1, lon1, lat2, lon2) => {
   return Math.round(rawDist * 10) / 10;
 };
 
-export const getDeliveryFeeFromDistance = (distanceKm) => {
+/**
+ * Base delivery fee brackets based on distance:
+ * <= 2.5 km : Rs. 150 base (Free if subtotal >= 1800)
+ * <= 5.0 km : Rs. 250
+ * <= 7.5 km : Rs. 500
+ * <= 10.0 km: Rs. 750
+ * > 10 km   : Rs. 750 + Rs. 250 per additional 2.5 km
+ */
+export const getDeliveryFeeFromDistance = (distanceKm, subtotal = 0) => {
   if (distanceKm === null || distanceKm === undefined) return 0;
-  if (distanceKm <= 2.5) return 0;
+  
+  // Free delivery within 2.5 KM on orders above PKR 1,800
+  if (distanceKm <= 2.5) {
+    return subtotal >= 1800 ? 0 : 150;
+  }
   if (distanceKm <= 5.0) return 250;
-  if (distanceKm <= 7.5) return 500;
-  if (distanceKm <= 10.0) return 750;
-  return 750 + Math.ceil((distanceKm - 10) / 2.5) * 250;
+  return 500;
 };

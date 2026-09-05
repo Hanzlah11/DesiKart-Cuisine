@@ -77,7 +77,7 @@ const EmailAuthModal = ({ isOpen, onClose, onSuccess }) => {
                   value={name} 
                   onChange={(e) => setName(e.target.value)} 
                   required 
-                  placeholder="e.g. Mubashir Iqbal"
+                  placeholder="e.g. XYZABC"
                 />
               </div>
               <div className="form-group">

@@ -3,6 +3,12 @@ import { menuCategories, menuItems, formatPrice } from '../data/menu';
 import DishDetailModal from './DishDetailModal';
 import './Menu.css';
 
+const SUB_CATEGORY_ORDER = [
+  { id: 'specials', label: 'DesiKart Specials' },
+  { id: 'mains', label: 'Main Dishes & Combos' },
+  { id: 'addons', label: 'Add-ons' }
+];
+
 const Menu = ({ onAddToCart }) => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [selectedDish, setSelectedDish] = useState(null);
@@ -10,7 +16,6 @@ const Menu = ({ onAddToCart }) => {
   const canvasRef = useRef(null);
   const dropdownRef = useRef(null);
 
-  // Filter out all locked / coming soon items
   const availableDishes = menuItems.filter(item => !item.isLocked);
 
   useEffect(() => {
@@ -144,17 +149,12 @@ const Menu = ({ onAddToCart }) => {
     };
   }, []);
 
-  // Filter categories with active dishes
-  const activeCategories = menuCategories.filter(cat => {
-    if (cat.id === 'all') return true;
-    return availableDishes.some(dish => dish.categories && dish.categories.includes(cat.id));
-  });
+  const activeCategoryLabel = menuCategories.find(c => c.id === activeCategory)?.label || 'All';
 
-  const activeCategoryLabel = activeCategories.find(c => c.id === activeCategory)?.label || 'All Specialties';
-
-  const sectionsToRender = activeCategory === 'all'
-    ? activeCategories.filter(cat => cat.id !== 'all')
-    : activeCategories.filter(cat => cat.id === activeCategory);
+  // Filter dishes based on active portion category
+  const filteredDishes = activeCategory === 'all'
+    ? availableDishes
+    : availableDishes.filter(dish => dish.portionCategory === activeCategory);
 
   const renderDishCard = (dish, index) => {
     const complimentaryList = Array.isArray(dish.complimentary)
@@ -167,12 +167,12 @@ const Menu = ({ onAddToCart }) => {
       <div 
         key={dish.id} 
         className="dish-card animate-fade-in"
-        style={{ animationDelay: `${index * 0.03}s` }}
+        style={{ animationDelay: `${index * 0.02}s` }}
         onClick={() => setSelectedDish(dish)}
       >
         <div className="dish-img-container">
           {dish.badge && (
-            <span className={`dish-badge ${dish.badge.toLowerCase().includes('special') || dish.badge.toLowerCase().includes('signature') ? 'yellow' : 'red'}`}>
+            <span className={`dish-badge ${dish.badge.toLowerCase().includes('special') ? 'yellow' : 'red'}`}>
               {dish.badge}
             </span>
           )}
@@ -223,10 +223,10 @@ const Menu = ({ onAddToCart }) => {
           <p className="section-subtitle">Explore our authentic categories and traditional specialties</p>
         </div>
 
-        {/* Desktop Sticky Tabs */}
+        {/* Desktop Sticky Tabs: All, Single (250g), Half (500g), Full (1kg), Add-ons */}
         <div className="menu-sub-navbar">
           <div className="sub-nav-container">
-            {activeCategories.map((cat) => (
+            {menuCategories.map((cat) => (
               <button
                 key={cat.id}
                 type="button"
@@ -256,7 +256,7 @@ const Menu = ({ onAddToCart }) => {
 
           {dropdownOpen && (
             <div className="mobile-category-dropdown-list">
-              {activeCategories.map((cat) => (
+              {menuCategories.map((cat) => (
                 <button
                   key={cat.id}
                   type="button"
@@ -274,28 +274,24 @@ const Menu = ({ onAddToCart }) => {
           )}
         </div>
 
-        {/* Categorized Subsections */}
+        {/* Categorized Subsections (Divided by DesiKart Specials, Main Dishes, Add-ons) */}
         <div className="menu-sections-container">
-          {sectionsToRender.map((category) => {
-            const categoryDishes = availableDishes.filter(item => 
-              item.categories && item.categories.includes(category.id)
-            );
-            if (categoryDishes.length === 0) return null;
+          {SUB_CATEGORY_ORDER.map((subCat) => {
+            const subCatDishes = filteredDishes.filter(item => item.subCategory === subCat.id);
+            if (subCatDishes.length === 0) return null;
 
             return (
-              <div key={category.id} className="menu-category-group">
-                {activeCategory === 'all' && (
-                  <div className="menu-group-header">
-                    <div className="menu-group-line"></div>
-                    <h3 className="menu-group-title">
-                      <span className="group-title-highlight">{category.label}</span>
-                    </h3>
-                    <div className="menu-group-line"></div>
-                  </div>
-                )}
+              <div key={subCat.id} className="menu-category-group">
+                <div className="menu-group-header">
+                  <div className="menu-group-line"></div>
+                  <h3 className="menu-group-title">
+                    <span className="group-title-highlight">{subCat.label}</span>
+                  </h3>
+                  <div className="menu-group-line"></div>
+                </div>
 
                 <div className="menu-grid">
-                  {categoryDishes.map((dish, index) => renderDishCard(dish, index))}
+                  {subCatDishes.map((dish, index) => renderDishCard(dish, index))}
                 </div>
               </div>
             );

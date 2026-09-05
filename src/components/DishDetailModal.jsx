@@ -5,10 +5,10 @@ import './DishDetailModal.css';
 const AVAILABLE_ADDONS = [
   { id: 'plain-naan', name: 'Plain Naan', price: 50, image: '/images/menu/plain_naan.jpeg', serving: 'Add-on' },
   { id: 'roghni-naan', name: 'Roghni Naan', price: 120, image: '/images/menu/roghni_naan.jpeg', serving: 'Add-on' },
-  { id: 'garlic-naan', name: 'Garlic Naan', price: 95, image: '/images/menu/garlic_naan.jpeg', serving: 'Add-on' },
-  { id: 'zeera-raita', name: 'Zeera Raita', price: 160, image: '/images/menu/zeera_raita.jpeg', serving: 'Add-on' },
-  { id: 'pudina-raita', name: 'Pudina Raita', price: 160, image: '/images/menu/pudina_raita.jpeg', serving: 'Add-on' },
-  { id: 'soft-drink', name: 'Soft Drink 250ml Can', price: 140, image: '/images/menu/soft_drink.jpeg', serving: 'Add-on' }
+  { id: 'extra-nali', name: '1 Nali (Beef)', price: 200, image: '/images/menu/nalli_beef_nihari.jpeg', serving: 'Add-on' },
+  { id: 'zeera-raita', name: 'Zeera Raita (10 oz)', price: 160, image: '/images/menu/zeera_raita.jpeg', serving: 'Add-on' },
+  { id: 'pudina-chutney', name: 'Pudina Chutney (10 oz)', price: 160, image: '/images/menu/pudina_raita.jpeg', serving: 'Add-on' },
+  { id: 'soft-drink', name: 'Soft Drink 250ml Can', price: 150, image: '/images/menu/soft_drink.jpeg', serving: 'Add-on' }
 ];
 
 const DishDetailModal = ({ dish, isOpen, onClose, onAddToCart }) => {
@@ -197,7 +197,7 @@ const DishDetailModal = ({ dish, isOpen, onClose, onAddToCart }) => {
           <div className="dish-modal-image-col">
             <img src={dish.image} alt={dish.name} className="dish-modal-img" />
             {dish.badge && (
-              <span className={`dish-modal-badge ${dish.badge.toLowerCase().includes('special') || dish.badge.toLowerCase().includes('signature') ? 'yellow' : 'red'}`}>
+              <span className={`dish-modal-badge ${dish.badge.toLowerCase().includes('special') ? 'yellow' : 'red'}`}>
                 {dish.badge}
               </span>
             )}
@@ -205,23 +205,28 @@ const DishDetailModal = ({ dish, isOpen, onClose, onAddToCart }) => {
           </div>
 
           <div className="dish-modal-details-col">
-            <span className="dish-modal-cat">{dish.categoryLabel || dish.category}</span>
             <h2 className="dish-modal-title">{dish.name}</h2>
             <p className="dish-modal-desc">{dish.description}</p>
             <div className="dish-modal-price">{formatPrice(dish.price)}</div>
 
-            {complimentaryList.length > 0 && (
+            {complimentaryList.length > 0 ? (
               <div className="complimentary-box">
-                <h4 className="complimentary-title">Complimentary Inclusions (Included in Price)</h4>
+                <h4 className="complimentary-title">✨ Included in this Combo Deal:</h4>
                 <ul className="complimentary-list">
                   {complimentaryList.map((item, idx) => (
                     <li key={idx}>✓ {item}</li>
                   ))}
                 </ul>
               </div>
+            ) : (
+              <div className="complimentary-box" style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px dashed var(--border-subtle)' }}>
+                <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                  ℹ️ À La Carte: Pure dish without complimentary side items.
+                </span>
+              </div>
             )}
 
-            {dish.category !== 'addons' && (
+            {!dish.categories?.includes('addons') && (
               <div className="dish-modal-addons-section">
                 <div className="modal-addons-header-row">
                   <span className="modal-addons-header">Extra Add-ons</span>

@@ -23,6 +23,7 @@ import {
   onAuthStateChanged, 
   signOut 
 } from './firebase';
+import { getDeliveryFeeFromDistance } from './utils/deliveryCalculator';
 import { openWhatsApp } from './utils/whatsappRedirect';
 
 function App() {
@@ -60,10 +61,20 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  const handleLocationConfirmed = ({ address, coords, distanceKm, deliveryFee }) => {
+  // Recalculates fee whenever cart items change to honour the PKR 1,800 free delivery threshold
+  useEffect(() => {
+    if (deliveryDistanceKm !== null) {
+      const subtotal = cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0);
+      const fee = getDeliveryFeeFromDistance(deliveryDistanceKm, subtotal);
+      setDeliveryFee(fee);
+    }
+  }, [cartItems, deliveryDistanceKm]);
+
+  const handleLocationConfirmed = ({ address, coords, distanceKm }) => {
     setDeliveryAddress(address);
     setDeliveryDistanceKm(distanceKm);
-    setDeliveryFee(deliveryFee);
+    const subtotal = cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0);
+    setDeliveryFee(getDeliveryFeeFromDistance(distanceKm, subtotal));
   };
 
   const handleAddToCart = (dish) => {
@@ -127,31 +138,34 @@ function App() {
       deliveryFee,
       distanceKm: deliveryDistanceKm,
       total,
+      paymentMethod: "Advance Payment Only",
       status: "pending",
       createdAt: serverTimestamp()
     };
 
-    // Log to Firestore in the background
     addDoc(collection(db, "orders"), orderPayload).catch((err) => {
       console.error("Firestore Order Log Error:", err);
     });
 
-    // Format WhatsApp message without invoice auto-download
     let message = `*New Order Placed - DesiKart Cuisine*\n`;
     message += `*Order Ref:* #${orderTimestampId}\n\n`;
     message += `*Customer Name:* ${orderPayload.customerName}\n`;
     message += `*Phone:* ${orderPayload.phone}\n`;
     message += `*Delivery Address:* ${deliveryAddress}\n\n`;
+    message += `*Payment Terms:* Advance Payment Only\n\n`;
     message += `*Items Ordered:*\n`;
     
     cartItems.forEach((item, index) => {
-      message += `${index + 1}. ${item.name} (${item.serving || 'Standard'}) x${item.quantity || 1} - Rs. ${item.price * (item.quantity || 1)}\n`;
+      const compDetails = item.complimentary && item.complimentary.length > 0
+        ? `\n   ↳ Included: ${item.complimentary.join(', ')}`
+        : '';
+      message += `${index + 1}. ${item.name} (${item.serving || 'Standard'}) x${item.quantity || 1} - Rs. ${item.price * (item.quantity || 1)}${compDetails}\n`;
     });
 
     message += `\n*Subtotal:* Rs. ${subtotal}`;
-    message += `\n*Delivery Fee:* Rs. ${deliveryFee}${deliveryDistanceKm !== null ? ` (~${Number(deliveryDistanceKm).toFixed(1)} km)` : ''}`;
+    message += `\n*Delivery Fee:* ${deliveryFee === 0 ? 'FREE (within 2.5km promo)' : `Rs. ${deliveryFee}${deliveryDistanceKm !== null ? ` (~${Number(deliveryDistanceKm).toFixed(1)} km)` : ''}`}`;
     message += `\n*Total Amount:* Rs. ${total}`;
-    message += `\n\nPlease confirm my order!`;
+    message += `\n\nPlease share your bank details for advance payment to confirm the order!`;
 
     openWhatsApp("923115077779", message);
   };
