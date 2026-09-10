@@ -227,7 +227,7 @@ export const menuItems = [
     category: 'combo',
     subCategory: 'mains',
     subCategoryLabel: 'Main Dishes',
-    image: '/images/menu/degi_beef_qorma.jpeg',
+    image: '/images/menu/beef_qorma.jpeg',
     description: 'Traditional degi beef qorma complete meal with fresh naan, salad & drink.',
     variations: [
       { id: 'single', label: 'Single (250g)', price: 1290, complimentary: COMBO_INCLUSIONS_BY_PORTION.single },
