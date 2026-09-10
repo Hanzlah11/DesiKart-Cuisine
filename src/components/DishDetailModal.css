@@ -182,6 +182,76 @@
   letter-spacing: 1px;
 }
 
+/* =========================================================
+   PORTION VARIATION SELECTOR PILLS
+========================================================= */
+.variation-selector-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.2rem 0;
+}
+
+.variation-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--logo-yellow);
+  text-transform: uppercase;
+}
+
+.variation-pills-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+
+.variation-pill-btn {
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-gold);
+  border-radius: 10px;
+  padding: 0.6rem 0.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.variation-pill-btn .var-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--logo-cream);
+}
+
+.variation-pill-btn .var-price {
+  font-size: 0.75rem;
+  color: var(--logo-yellow);
+  font-family: var(--font-prime);
+}
+
+.variation-pill-btn:hover {
+  border-color: var(--logo-yellow);
+  background: rgba(244, 186, 63, 0.08);
+  transform: translateY(-2px);
+}
+
+.variation-pill-btn.active {
+  background: var(--logo-yellow) !important;
+  border-color: var(--logo-yellow) !important;
+  box-shadow: 0 4px 14px rgba(244, 186, 63, 0.4);
+}
+
+.variation-pill-btn.active .var-label,
+.variation-pill-btn.active .var-price {
+  color: #121212 !important;
+  font-weight: 700;
+}
+
+/* =========================================================
+   COMPLIMENTARY INCLUSIONS BOX
+========================================================= */
 .complimentary-box {
   background: var(--bg-elevated);
   border: 1px dashed var(--border-gold);
@@ -215,6 +285,9 @@
   font-size: 0.85rem;
 }
 
+/* =========================================================
+   ADD-ONS SECTION
+========================================================= */
 .dish-modal-addons-section {
   border-top: 1px solid var(--border-subtle);
   padding-top: 0.9rem;
@@ -355,7 +428,7 @@
   padding: 0.95rem 1.4rem;
   font-family: var(--font-prime) !important;
   font-size: 1rem;
-  font-weight: 400 !important;
+  font-weight: 700 !important;
   letter-spacing: 1.2px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -366,14 +439,13 @@
 }
 
 .dish-modal-add-btn:hover {
-  background: var(--logo-yellow);
-  color: #FFFFFF !important;
-  box-shadow: 0 0 20px rgba(184, 123, 20, 0.4);
+  background: #b5290e;
+  box-shadow: 0 0 20px rgba(210, 50, 20, 0.6);
 }
 
 .dish-modal-add-btn strong {
   font-size: 1.1rem;
-  font-weight: 400 !important;
+  font-weight: 700 !important;
 }
 
 @media (max-width: 768px) {
@@ -385,5 +457,17 @@
   .dish-modal-image-col {
     min-height: 200px;
     max-height: 240px;
+  }
+  .variation-pills-row {
+    gap: 0.4rem;
+  }
+  .variation-pill-btn {
+    padding: 0.5rem 0.2rem;
+  }
+  .variation-pill-btn .var-label {
+    font-size: 0.72rem;
+  }
+  .variation-pill-btn .var-price {
+    font-size: 0.7rem;
   }
 }

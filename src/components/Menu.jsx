@@ -5,7 +5,7 @@ import './Menu.css';
 
 const SUB_CATEGORY_ORDER = [
   { id: 'specials', label: 'DesiKart Specials' },
-  { id: 'mains', label: 'Main Dishes & Combos' },
+  { id: 'mains', label: 'Main Dishes' },
   { id: 'addons', label: 'Add-ons' }
 ];
 
@@ -151,17 +151,18 @@ const Menu = ({ onAddToCart }) => {
 
   const activeCategoryLabel = menuCategories.find(c => c.id === activeCategory)?.label || 'All';
 
-  // Filter dishes based on active portion category
+  // Fixed filtering condition checking dish.category directly
   const filteredDishes = activeCategory === 'all'
     ? availableDishes
-    : availableDishes.filter(dish => dish.portionCategory === activeCategory);
+    : availableDishes.filter(dish => dish.category === activeCategory);
 
   const renderDishCard = (dish, index) => {
-    const complimentaryList = Array.isArray(dish.complimentary)
-      ? dish.complimentary
-      : typeof dish.complimentary === 'string'
-      ? dish.complimentary.split(',').map((s) => s.trim())
-      : [];
+    const hasVariations = Array.isArray(dish.variations) && dish.variations.length > 0;
+    const displayPrice = hasVariations ? dish.variations[0].price : dish.price;
+    const displayServing = hasVariations ? dish.variations[0].label : (dish.serving || '');
+    const complimentaryList = hasVariations
+      ? dish.variations[0].complimentary || []
+      : dish.complimentary || [];
 
     return (
       <div 
@@ -177,7 +178,7 @@ const Menu = ({ onAddToCart }) => {
             </span>
           )}
           <img src={dish.image} alt={dish.name} />
-          <span className="serving-pill">{dish.serving}</span>
+          <span className="serving-pill">{hasVariations ? '3 Sizes Available' : displayServing}</span>
         </div>
 
         <div className="dish-info-card">
@@ -196,16 +197,18 @@ const Menu = ({ onAddToCart }) => {
           )}
 
           <div className="dish-footer">
-            <span className="dish-price">{formatPrice(dish.price)}</span>
+            <span className="dish-price">
+              {hasVariations ? `From ${formatPrice(displayPrice)}` : formatPrice(displayPrice)}
+            </span>
             <button 
               type="button"
               className="add-cart-btn"
               onClick={(e) => {
                 e.stopPropagation();
-                if (onAddToCart) onAddToCart(dish);
+                setSelectedDish(dish);
               }}
             >
-              ADD TO ORDER
+              {hasVariations ? 'SELECT SIZE' : 'ADD TO ORDER'}
             </button>
           </div>
         </div>
@@ -223,7 +226,7 @@ const Menu = ({ onAddToCart }) => {
           <p className="section-subtitle">Explore our authentic categories and traditional specialties</p>
         </div>
 
-        {/* Desktop Sticky Tabs: All, Single (250g), Half (500g), Full (1kg), Add-ons */}
+        {/* Desktop Sticky Tabs: All, Single Dishes, Combo Deals, Add-ons */}
         <div className="menu-sub-navbar">
           <div className="sub-nav-container">
             {menuCategories.map((cat) => (
@@ -274,7 +277,7 @@ const Menu = ({ onAddToCart }) => {
           )}
         </div>
 
-        {/* Categorized Subsections (Divided by DesiKart Specials, Main Dishes, Add-ons) */}
+        {/* Categorized Subsections */}
         <div className="menu-sections-container">
           {SUB_CATEGORY_ORDER.map((subCat) => {
             const subCatDishes = filteredDishes.filter(item => item.subCategory === subCat.id);

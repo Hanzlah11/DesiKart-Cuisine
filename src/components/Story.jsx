@@ -18,8 +18,8 @@ const timelineMilestones = [
     title: 'Heritage Dishes, Zero Shortcuts',
     desc: 'From slow-simmered Nihari and Paya to rich Degi Qorma, comforting Haleem, Chinioti Mutton Kunna, and fiery BBQ, each dish is given the patient time and craft it deserves.',
     hasMedia: true,
-    imgSrc: '/images/menu/nalli_beef_nihari.jpeg',
-    badge: 'Signature Nalli Nihari',
+    imgSrc: '/images/menu/nali_beef_nihari.jpeg',
+    badge: 'Signature Nali Nihari',
     animType: 'anim-flame'
   },
   {

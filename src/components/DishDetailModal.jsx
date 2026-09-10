@@ -8,15 +8,17 @@ const AVAILABLE_ADDONS = [
   { id: 'extra-nali', name: '1 Nali (Beef)', price: 200, image: '/images/menu/nalli_beef_nihari.jpeg', serving: 'Add-on' },
   { id: 'zeera-raita', name: 'Zeera Raita (10 oz)', price: 160, image: '/images/menu/zeera_raita.jpeg', serving: 'Add-on' },
   { id: 'pudina-chutney', name: 'Pudina Chutney (10 oz)', price: 160, image: '/images/menu/pudina_raita.jpeg', serving: 'Add-on' },
-  { id: 'soft-drink', name: 'Soft Drink 250ml Can', price: 150, image: '/images/menu/soft_drink.jpeg', serving: 'Add-on' }
+  { id: 'soft-drink', name: 'Soft Drink (250ml Can)', price: 150, image: '/images/menu/soft_drink.jpeg', serving: 'Add-on' }
 ];
 
 const DishDetailModal = ({ dish, isOpen, onClose, onAddToCart }) => {
+  const [selectedVariationId, setSelectedVariationId] = useState('single');
   const [selectedAddons, setSelectedAddons] = useState({});
   const canvasRef = useRef(null);
 
   useEffect(() => {
     if (isOpen) {
+      setSelectedVariationId(dish?.variations?.[0]?.id || 'single');
       setSelectedAddons({});
     }
   }, [isOpen, dish]);
@@ -145,11 +147,16 @@ const DishDetailModal = ({ dish, isOpen, onClose, onAddToCart }) => {
 
   if (!isOpen || !dish) return null;
 
-  const complimentaryList = Array.isArray(dish.complimentary)
-    ? dish.complimentary
-    : typeof dish.complimentary === 'string'
-    ? dish.complimentary.split(',').map((s) => s.trim())
-    : [];
+  const hasVariations = Array.isArray(dish.variations) && dish.variations.length > 0;
+  const currentVariation = hasVariations
+    ? dish.variations.find((v) => v.id === selectedVariationId) || dish.variations[0]
+    : null;
+
+  const basePrice = currentVariation ? currentVariation.price : (dish.price || 0);
+  const currentServing = currentVariation ? currentVariation.label : (dish.serving || '');
+  const complimentaryList = currentVariation
+    ? currentVariation.complimentary || []
+    : (dish.complimentary || []);
 
   const handleUpdateAddonQty = (addonId, delta) => {
     setSelectedAddons((prev) => {
@@ -169,10 +176,19 @@ const DishDetailModal = ({ dish, isOpen, onClose, onAddToCart }) => {
     return sum + (item ? item.price * qty : 0);
   }, 0);
 
-  const combinedTotal = (dish.price || 0) + addonsTotal;
+  const combinedTotal = basePrice + addonsTotal;
 
   const handleMainAddToCart = () => {
-    onAddToCart(dish);
+    const itemToAdd = {
+      ...dish,
+      id: currentVariation ? `${dish.id}-${currentVariation.id}` : dish.id,
+      name: dish.name,
+      price: basePrice,
+      serving: currentServing,
+      complimentary: complimentaryList,
+    };
+
+    onAddToCart(itemToAdd);
 
     Object.entries(selectedAddons).forEach(([addonId, qty]) => {
       const addonObj = AVAILABLE_ADDONS.find((a) => a.id === addonId);
@@ -201,17 +217,38 @@ const DishDetailModal = ({ dish, isOpen, onClose, onAddToCart }) => {
                 {dish.badge}
               </span>
             )}
-            <span className="dish-modal-serving-tag">{dish.serving}</span>
+            <span className="dish-modal-serving-tag">{currentServing}</span>
           </div>
 
           <div className="dish-modal-details-col">
             <h2 className="dish-modal-title">{dish.name}</h2>
             <p className="dish-modal-desc">{dish.description}</p>
-            <div className="dish-modal-price">{formatPrice(dish.price)}</div>
+            <div className="dish-modal-price">{formatPrice(basePrice)}</div>
 
+            {/* Size Variation Selector Pills */}
+            {hasVariations && (
+              <div className="variation-selector-group">
+                <span className="variation-label">Choose Portion Size:</span>
+                <div className="variation-pills-row">
+                  {dish.variations.map((v) => (
+                    <button
+                      key={v.id}
+                      type="button"
+                      className={`variation-pill-btn ${selectedVariationId === v.id ? 'active' : ''}`}
+                      onClick={() => setSelectedVariationId(v.id)}
+                    >
+                      <span className="var-label">{v.label}</span>
+                      <span className="var-price">{formatPrice(v.price)}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Dynamic Included Inclusions */}
             {complimentaryList.length > 0 ? (
               <div className="complimentary-box">
-                <h4 className="complimentary-title">✨ Included in this Combo Deal:</h4>
+                <h4 className="complimentary-title">✨ Included with this Deal:</h4>
                 <ul className="complimentary-list">
                   {complimentaryList.map((item, idx) => (
                     <li key={idx}>✓ {item}</li>
@@ -219,14 +256,17 @@ const DishDetailModal = ({ dish, isOpen, onClose, onAddToCart }) => {
                 </ul>
               </div>
             ) : (
-              <div className="complimentary-box" style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px dashed var(--border-subtle)' }}>
-                <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                  ℹ️ À La Carte: Pure dish without complimentary side items.
-                </span>
-              </div>
+              dish.category !== 'addons' && (
+                <div className="complimentary-box" style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px dashed var(--border-subtle)' }}>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                    ℹ️ À La Carte: Pure dish without complimentary side items.
+                  </span>
+                </div>
+              )
             )}
 
-            {!dish.categories?.includes('addons') && (
+            {/* Extra Addons */}
+            {dish.category !== 'addons' && (
               <div className="dish-modal-addons-section">
                 <div className="modal-addons-header-row">
                   <span className="modal-addons-header">Extra Add-ons</span>
