@@ -5,9 +5,9 @@ import './DishDetailModal.css';
 const AVAILABLE_ADDONS = [
   { id: 'plain-naan', name: 'Plain Naan', price: 50, image: '/images/menu/plain_naan.jpeg', serving: 'Add-on' },
   { id: 'roghni-naan', name: 'Roghni Naan', price: 120, image: '/images/menu/roghni_naan.jpeg', serving: 'Add-on' },
-  { id: 'extra-nali', name: '1 Nali (Beef)', price: 200, image: '/images/menu/nalli_beef_nihari.jpeg', serving: 'Add-on' },
+  { id: 'extra-nali', name: '1 Nali (Beef)', price: 200, image: '/images/menu/nali.jpeg', serving: 'Add-on' },
   { id: 'zeera-raita', name: 'Zeera Raita (10 oz)', price: 160, image: '/images/menu/zeera_raita.jpeg', serving: 'Add-on' },
-  { id: 'pudina-chutney', name: 'Pudina Chutney (10 oz)', price: 160, image: '/images/menu/pudina_raita.jpeg', serving: 'Add-on' },
+  { id: 'pudina-chutney', name: 'Pudina Chutney (10 oz)', price: 160, image: '/images/menu/pudina_chatney.jpeg', serving: 'Add-on' },
   { id: 'soft-drink', name: 'Soft Drink (250ml Can)', price: 150, image: '/images/menu/soft_drink.jpeg', serving: 'Add-on' }
 ];
 
