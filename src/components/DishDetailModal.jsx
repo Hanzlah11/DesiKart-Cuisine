@@ -1,241 +1,106 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { formatPrice } from '../data/menu';
+import React, { useState, useEffect } from 'react';
+import { menuItems, formatPrice } from '../data/menu';
 import './DishDetailModal.css';
 
-const AVAILABLE_ADDONS = [
-  { id: 'plain-naan', name: 'Plain Naan', price: 50, image: '/images/menu/plain_naan.jpeg', serving: 'Add-on' },
-  { id: 'roghni-naan', name: 'Roghni Naan', price: 120, image: '/images/menu/roghni_naan.jpeg', serving: 'Add-on' },
-  { id: 'extra-nali', name: '1 Nali (Beef)', price: 200, image: '/images/menu/nali.jpeg', serving: 'Add-on' },
-  { id: 'zeera-raita', name: 'Zeera Raita (10 oz)', price: 160, image: '/images/menu/zeera_raita.jpeg', serving: 'Add-on' },
-  { id: 'pudina-chutney', name: 'Pudina Chutney (10 oz)', price: 160, image: '/images/menu/pudina_chatney.jpeg', serving: 'Add-on' },
-  { id: 'soft-drink', name: 'Soft Drink (250ml Can)', price: 150, image: '/images/menu/soft_drink.jpeg', serving: 'Add-on' }
-];
-
-const DishDetailModal = ({ dish, isOpen, onClose, onAddToCart }) => {
-  const [selectedVariationId, setSelectedVariationId] = useState('single');
-  const [selectedAddons, setSelectedAddons] = useState({});
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    if (isOpen) {
-      setSelectedVariationId(dish?.variations?.[0]?.id || 'single');
-      setSelectedAddons({});
-    }
-  }, [isOpen, dish]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    let width = (canvas.width = canvas.offsetWidth);
-    let height = (canvas.height = canvas.offsetHeight);
-
-    const handleResize = () => {
-      if (!canvas) return;
-      width = canvas.width = canvas.offsetWidth;
-      height = canvas.height = canvas.offsetHeight;
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    const isLightObsidian = () => {
-      const theme = document.documentElement.getAttribute('data-theme');
-      return theme === 'light' || theme === 'cardamom' || theme === 'light-obsidian';
-    };
-
-    class SmokeParticle {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = Math.random() * width;
-        this.y = height + Math.random() * 40;
-        this.radius = Math.random() * 50 + 30;
-        this.speedY = Math.random() * 0.3 + 0.1;
-        this.speedX = (Math.random() - 0.5) * 0.2;
-        this.opacity = Math.random() * 0.04 + 0.01;
-        this.fadeSpeed = Math.random() * 0.0003 + 0.0001;
-      }
-      update() {
-        this.y -= this.speedY;
-        this.x += this.speedX;
-        this.radius += 0.1;
-        this.opacity -= this.fadeSpeed;
-        if (this.y < -this.radius || this.opacity <= 0) this.reset();
-      }
-      draw() {
-        ctx.save();
-        const light = isLightObsidian();
-        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
-
-        if (light) {
-          gradient.addColorStop(0, `rgba(194, 203, 197, ${this.opacity * 1.5})`);
-          gradient.addColorStop(0.5, `rgba(255, 196, 77, ${this.opacity * 0.6})`);
-          gradient.addColorStop(1, 'rgba(43, 48, 45, 0)');
-        } else {
-          gradient.addColorStop(0, `rgba(244, 186, 63, ${this.opacity})`);
-          gradient.addColorStop(0.5, `rgba(210, 50, 20, ${this.opacity * 0.3})`);
-          gradient.addColorStop(1, 'rgba(10, 10, 10, 0)');
-        }
-
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
-    }
-
-    class EmberParticle {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = Math.random() * width;
-        this.y = height + Math.random() * 20;
-        this.size = Math.random() * 1.8 + 0.5;
-        this.speedY = Math.random() * 0.8 + 0.2;
-        this.speedX = (Math.random() - 0.5) * 0.4;
-        this.opacity = Math.random() * 0.7 + 0.2;
-        this.fadeSpeed = Math.random() * 0.004 + 0.001;
-      }
-      update() {
-        this.y -= this.speedY;
-        this.x += this.speedX + Math.sin(this.y * 0.01) * 0.2;
-        this.opacity -= this.fadeSpeed;
-        if (this.y < -10 || this.opacity <= 0) this.reset();
-      }
-      draw() {
-        ctx.save();
-        const light = isLightObsidian();
-        ctx.globalAlpha = this.opacity;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-
-        const color = light
-          ? (Math.random() > 0.4 ? '#FFC44D' : '#E63B1C')
-          : (Math.random() > 0.4 ? '#F4BA3F' : '#D23214');
-
-        ctx.fillStyle = color;
-        ctx.shadowBlur = 6;
-        ctx.shadowColor = color;
-        ctx.fill();
-        ctx.restore();
-      }
-    }
-
-    const smokeParticles = Array.from({ length: 8 }, () => new SmokeParticle());
-    const emberParticles = Array.from({ length: 16 }, () => new EmberParticle());
-
-    let animationFrameId;
-    const animate = () => {
-      ctx.clearRect(0, 0, width, height);
-      smokeParticles.forEach((s) => { s.update(); s.draw(); });
-      emberParticles.forEach((e) => { e.update(); e.draw(); });
-      animationFrameId = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, [isOpen]);
-
+export const DishDetailModal = ({ dish, isOpen, onClose, onAddToCart }) => {
   if (!isOpen || !dish) return null;
 
-  const hasVariations = Array.isArray(dish.variations) && dish.variations.length > 0;
-  const currentVariation = hasVariations
-    ? dish.variations.find((v) => v.id === selectedVariationId) || dish.variations[0]
-    : null;
+  const [selectedVariation, setSelectedVariation] = useState(null);
+  const [selectedAddons, setSelectedAddons] = useState([]);
+  const [quantity, setQuantity] = useState(1);
 
-  const basePrice = currentVariation ? currentVariation.price : (dish.price || 0);
-  const currentServing = currentVariation ? currentVariation.label : (dish.serving || '');
-  const complimentaryList = currentVariation
-    ? currentVariation.complimentary || []
-    : (dish.complimentary || []);
+  useEffect(() => {
+    if (dish?.variations && dish.variations.length > 0) {
+      setSelectedVariation(dish.variations[0]);
+    } else {
+      setSelectedVariation(null);
+    }
+    setSelectedAddons([]);
+    setQuantity(1);
+  }, [dish]);
 
-  const handleUpdateAddonQty = (addonId, delta) => {
+  const availableAddons = menuItems.filter((item) => item.category === 'addons');
+
+  const basePrice = selectedVariation ? selectedVariation.price : (dish.price || 0);
+  const addonsPriceTotal = selectedAddons.reduce((sum, addon) => sum + (addon.price * addon.quantity), 0);
+  const totalPrice = (basePrice + addonsPriceTotal) * quantity;
+
+  const handleToggleAddon = (addon) => {
     setSelectedAddons((prev) => {
-      const currentQty = prev[addonId] || 0;
-      const nextQty = currentQty + delta;
-      if (nextQty <= 0) {
-        const copy = { ...prev };
-        delete copy[addonId];
-        return copy;
+      const exists = prev.find((a) => a.id === addon.id);
+      if (exists) {
+        return prev.filter((a) => a.id !== addon.id);
+      } else {
+        return [...prev, { ...addon, quantity: 1 }];
       }
-      return { ...prev, [addonId]: nextQty };
     });
   };
 
-  const addonsTotal = Object.entries(selectedAddons).reduce((sum, [addonId, qty]) => {
-    const item = AVAILABLE_ADDONS.find((a) => a.id === addonId);
-    return sum + (item ? item.price * qty : 0);
-  }, 0);
+  const handleUpdateAddonQty = (addonId, delta) => {
+    setSelectedAddons((prev) =>
+      prev
+        .map((a) => {
+          if (a.id === addonId) {
+            const newQty = a.quantity + delta;
+            return newQty > 0 ? { ...a, quantity: newQty } : null;
+          }
+          return a;
+        })
+        .filter(Boolean)
+    );
+  };
 
-  const combinedTotal = basePrice + addonsTotal;
-
-  const handleMainAddToCart = () => {
+  const handleAddToCart = () => {
     const itemToAdd = {
       ...dish,
-      id: currentVariation ? `${dish.id}-${currentVariation.id}` : dish.id,
-      name: dish.name,
-      price: basePrice,
-      serving: currentServing,
-      complimentary: complimentaryList,
+      selectedVariation,
+      selectedAddons,
+      quantity,
+      finalPrice: totalPrice / quantity,
     };
-
     onAddToCart(itemToAdd);
-
-    Object.entries(selectedAddons).forEach(([addonId, qty]) => {
-      const addonObj = AVAILABLE_ADDONS.find((a) => a.id === addonId);
-      if (addonObj && qty > 0) {
-        for (let i = 0; i < qty; i++) {
-          onAddToCart(addonObj);
-        }
-      }
-    });
-
     onClose();
   };
 
   return (
     <div className="dish-modal-backdrop" onClick={onClose}>
       <div className="dish-modal-container" onClick={(e) => e.stopPropagation()}>
-        <canvas ref={canvasRef} className="dish-modal-canvas" />
-
-        <button type="button" className="dish-modal-close" onClick={onClose} aria-label="Close modal">&times;</button>
+        <button className="dish-modal-close" onClick={onClose} aria-label="Close modal">
+          ✕
+        </button>
 
         <div className="dish-modal-content">
           <div className="dish-modal-image-col">
-            <img src={dish.image} alt={dish.name} className="dish-modal-img" />
+            {dish.image && (
+              <img src={dish.image} alt={dish.name} className="dish-modal-img" />
+            )}
             {dish.badge && (
-              <span className={`dish-modal-badge ${dish.badge.toLowerCase().includes('special') ? 'yellow' : 'red'}`}>
+              <span className={`dish-modal-badge ${dish.badge.toLowerCase().includes('special') || dish.badge.toLowerCase().includes('signature') ? 'yellow' : 'red'}`}>
                 {dish.badge}
               </span>
             )}
-            <span className="dish-modal-serving-tag">{currentServing}</span>
+            <span className="dish-modal-serving-tag">
+              {selectedVariation ? selectedVariation.label : (dish.serving || 'Standard Serving')}
+            </span>
           </div>
 
           <div className="dish-modal-details-col">
+            <span className="dish-modal-cat">
+              {dish.subCategoryLabel || dish.category}
+            </span>
             <h2 className="dish-modal-title">{dish.name}</h2>
             <p className="dish-modal-desc">{dish.description}</p>
-            <div className="dish-modal-price">{formatPrice(basePrice)}</div>
 
-            {/* Size Variation Selector Pills */}
-            {hasVariations && (
+            {dish.variations && dish.variations.length > 0 && (
               <div className="variation-selector-group">
-                <span className="variation-label">Choose Portion Size:</span>
+                <span className="variation-label">Select Serving Portion</span>
                 <div className="variation-pills-row">
                   {dish.variations.map((v) => (
                     <button
                       key={v.id}
                       type="button"
-                      className={`variation-pill-btn ${selectedVariationId === v.id ? 'active' : ''}`}
-                      onClick={() => setSelectedVariationId(v.id)}
+                      className={`variation-pill-btn ${selectedVariation?.id === v.id ? 'active' : ''}`}
+                      onClick={() => setSelectedVariation(v)}
                     >
                       <span className="var-label">{v.label}</span>
                       <span className="var-price">{formatPrice(v.price)}</span>
@@ -245,61 +110,68 @@ const DishDetailModal = ({ dish, isOpen, onClose, onAddToCart }) => {
               </div>
             )}
 
-            {/* Dynamic Included Inclusions */}
-            {complimentaryList.length > 0 ? (
+            {selectedVariation?.complimentary?.length > 0 && (
               <div className="complimentary-box">
-                <h4 className="complimentary-title">✨ Included with this Deal:</h4>
+                <h4 className="complimentary-title">✓ Complimentary Meal Inclusions</h4>
                 <ul className="complimentary-list">
-                  {complimentaryList.map((item, idx) => (
-                    <li key={idx}>✓ {item}</li>
+                  {selectedVariation.complimentary.map((inc, i) => (
+                    <li key={i}>• {inc}</li>
                   ))}
                 </ul>
               </div>
-            ) : (
-              dish.category !== 'addons' && (
-                <div className="complimentary-box" style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px dashed var(--border-subtle)' }}>
-                  <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                    ℹ️ À La Carte: Pure dish without complimentary side items.
-                  </span>
-                </div>
-              )
             )}
 
-            {/* Extra Addons */}
-            {dish.category !== 'addons' && (
+            {dish.category !== 'addons' && availableAddons.length > 0 && (
               <div className="dish-modal-addons-section">
                 <div className="modal-addons-header-row">
-                  <span className="modal-addons-header">Extra Add-ons</span>
-                  {addonsTotal > 0 && (
-                    <span className="addons-subtotal-tag">+ {formatPrice(addonsTotal)}</span>
+                  <span className="modal-addons-header">Optional Add-ons</span>
+                  {addonsPriceTotal > 0 && (
+                    <span className="addons-subtotal-tag">
+                      + {formatPrice(addonsPriceTotal)}
+                    </span>
                   )}
                 </div>
 
                 <div className="vertical-addons-list">
-                  {AVAILABLE_ADDONS.map((addon) => {
-                    const qty = selectedAddons[addon.id] || 0;
+                  {availableAddons.map((addon) => {
+                    const selectedAddon = selectedAddons.find((a) => a.id === addon.id);
+                    const isSelected = Boolean(selectedAddon);
+
                     return (
-                      <div key={addon.id} className={`vertical-addon-row ${qty > 0 ? 'selected' : ''}`}>
+                      <div
+                        key={addon.id}
+                        className={`vertical-addon-row ${isSelected ? 'selected' : ''}`}
+                      >
                         <img src={addon.image} alt={addon.name} className="vertical-addon-img" />
                         <div className="vertical-addon-info">
                           <strong>{addon.name}</strong>
                           <span>{formatPrice(addon.price)}</span>
                         </div>
 
-                        {qty === 0 ? (
-                          <button 
+                        {isSelected ? (
+                          <div className="modal-qty-changer">
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateAddonQty(addon.id, -1)}
+                            >
+                              -
+                            </button>
+                            <span>{selectedAddon.quantity}</span>
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateAddonQty(addon.id, 1)}
+                            >
+                              +
+                            </button>
+                          </div>
+                        ) : (
+                          <button
                             type="button"
                             className="vertical-addon-btn"
-                            onClick={() => handleUpdateAddonQty(addon.id, 1)}
+                            onClick={() => handleToggleAddon(addon)}
                           >
-                            + Add
+                            + ADD
                           </button>
-                        ) : (
-                          <div className="modal-qty-changer">
-                            <button type="button" onClick={() => handleUpdateAddonQty(addon.id, -1)}>-</button>
-                            <span>{qty}</span>
-                            <button type="button" onClick={() => handleUpdateAddonQty(addon.id, 1)}>+</button>
-                          </div>
                         )}
                       </div>
                     );
@@ -308,15 +180,35 @@ const DishDetailModal = ({ dish, isOpen, onClose, onAddToCart }) => {
               </div>
             )}
 
-            <button 
-              type="button"
-              className="dish-modal-add-btn" 
-              onClick={handleMainAddToCart}
-            >
-              <span>ADD TO ORDER</span>
-              <strong>{formatPrice(combinedTotal)}</strong>
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: 'auto' }}>
+              <div className="modal-qty-changer" style={{ padding: '0.4rem 0.6rem' }}>
+                <button
+                  type="button"
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  style={{ fontSize: '1.2rem' }}
+                >
+                  -
+                </button>
+                <span style={{ fontSize: '1.1rem', padding: '0 0.8rem' }}>{quantity}</span>
+                <button
+                  type="button"
+                  onClick={() => setQuantity(quantity + 1)}
+                  style={{ fontSize: '1.2rem' }}
+                >
+                  +
+                </button>
+              </div>
 
+              <button
+                type="button"
+                className="dish-modal-add-btn"
+                onClick={handleAddToCart}
+                style={{ flexGrow: 1 }}
+              >
+                <span>ADD TO ORDER</span>
+                <strong>{formatPrice(totalPrice)}</strong>
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -4,8 +4,10 @@ import DishDetailModal from './DishDetailModal';
 import './Menu.css';
 
 const SUB_CATEGORY_ORDER = [
+  { id: 'signature', label: 'Our Signature Dish' },
   { id: 'specials', label: 'DesiKart Specials' },
   { id: 'mains', label: 'Main Dishes' },
+  { id: 'dessert', label: 'Dessert' },
   { id: 'addons', label: 'Add-ons' }
 ];
 
@@ -151,7 +153,6 @@ const Menu = ({ onAddToCart }) => {
 
   const activeCategoryLabel = menuCategories.find(c => c.id === activeCategory)?.label || 'All';
 
-  // Fixed filtering condition checking dish.category directly
   const filteredDishes = activeCategory === 'all'
     ? availableDishes
     : availableDishes.filter(dish => dish.category === activeCategory);
@@ -173,7 +174,7 @@ const Menu = ({ onAddToCart }) => {
       >
         <div className="dish-img-container">
           {dish.badge && (
-            <span className={`dish-badge ${dish.badge.toLowerCase().includes('special') ? 'yellow' : 'red'}`}>
+            <span className={`dish-badge ${dish.badge.toLowerCase().includes('special') || dish.badge.toLowerCase().includes('signature') ? 'yellow' : 'red'}`}>
               {dish.badge}
             </span>
           )}
@@ -226,7 +227,6 @@ const Menu = ({ onAddToCart }) => {
           <p className="section-subtitle">Explore our authentic categories and traditional specialties</p>
         </div>
 
-        {/* Desktop Sticky Tabs: All, Single Dishes, Combo Deals, Add-ons */}
         <div className="menu-sub-navbar">
           <div className="sub-nav-container">
             {menuCategories.map((cat) => (
@@ -242,7 +242,6 @@ const Menu = ({ onAddToCart }) => {
           </div>
         </div>
 
-        {/* Mobile Dropdown Accordion */}
         <div className="mobile-category-dropdown-wrapper" ref={dropdownRef}>
           <button
             type="button"
@@ -277,7 +276,6 @@ const Menu = ({ onAddToCart }) => {
           )}
         </div>
 
-        {/* Categorized Subsections */}
         <div className="menu-sections-container">
           {SUB_CATEGORY_ORDER.map((subCat) => {
             const subCatDishes = filteredDishes.filter(item => item.subCategory === subCat.id);

@@ -2,6 +2,7 @@ export const menuCategories = [
   { id: 'all', label: 'All' },
   { id: 'single', label: 'Single Dishes (À La Carte)' },
   { id: 'combo', label: 'Combo Deals (Complete Meal)' },
+  { id: 'dessert', label: 'Dessert' },
   { id: 'addons', label: 'Add-ons' },
 ];
 
@@ -13,12 +14,47 @@ export const COMBO_INCLUSIONS_BY_PORTION = {
 
 export const menuItems = [
   /* =========================================================
-     DESIKART SPECIALS (Chinioti Mutton Kunna & Chicken Achari)
+     OUR SIGNATURE DISH
   ========================================================= */
-  // 1. Chinioti Mutton Kunna
+  // Mutton Katwa Gosht
+  {
+    id: 'mutton-katwa-gosht-alacarte',
+    name: 'Mutton Katwa Gosht (À La Carte)',
+    category: 'single',
+    subCategory: 'signature',
+    subCategoryLabel: 'Our Signature Dish',
+    image: '/images/menu/mutton_katwa.jpeg',
+    description: 'Authentic clay-pot slow-cooked mutton, cooked on low heat with traditional recipes and rich flavours.',
+    badge: 'Signature',
+    variations: [
+      { id: 'single', label: 'Single (250g)', price: 1440, complimentary: [] },
+      { id: 'half', label: 'Half (500g)', price: 2790, complimentary: [] },
+      { id: 'full', label: 'Full (1kg)', price: 5440, complimentary: [] }
+    ]
+  },
+  {
+    id: 'mutton-katwa-gosht-combo',
+    name: 'Mutton Katwa Gosht (Combo Deal)',
+    category: 'combo',
+    subCategory: 'signature',
+    subCategoryLabel: 'Our Signature Dish',
+    image: '/images/menu/mutton_katwa_combo.jpeg',
+    description: 'Signature clay-pot mutton katwa gosht served with freshly baked naan, salad & drink.',
+    badge: 'Signature Deal',
+    variations: [
+      { id: 'single', label: 'Single (250g)', price: 1700, complimentary: COMBO_INCLUSIONS_BY_PORTION.single },
+      { id: 'half', label: 'Half (500g)', price: 3090, complimentary: COMBO_INCLUSIONS_BY_PORTION.half },
+      { id: 'full', label: 'Full (1kg)', price: 5940, complimentary: COMBO_INCLUSIONS_BY_PORTION.full }
+    ]
+  },
+
+  /* =========================================================
+     DESIKART SPECIALS
+  ========================================================= */
+  // Chinioti Mutton Kunna
   {
     id: 'mutton-kunna-alacarte',
-    name: 'Chinioti Mutton Kunna',
+    name: 'Chinioti Mutton Kunna (À La Carte)',
     category: 'single',
     subCategory: 'specials',
     subCategoryLabel: 'DesiKart Specials',
@@ -33,7 +69,7 @@ export const menuItems = [
   },
   {
     id: 'mutton-kunna-combo',
-    name: 'Chinioti Mutton Kunna',
+    name: 'Chinioti Mutton Kunna (Combo Deal)',
     category: 'combo',
     subCategory: 'specials',
     subCategoryLabel: 'DesiKart Specials',
@@ -47,10 +83,10 @@ export const menuItems = [
     ]
   },
 
-  // 2. Chicken Achari
+  // Chicken Achari
   {
     id: 'chicken-achari-alacarte',
-    name: 'Chicken Achari',
+    name: 'Chicken Achari (À La Carte)',
     category: 'single',
     subCategory: 'specials',
     subCategoryLabel: 'DesiKart Specials',
@@ -65,7 +101,7 @@ export const menuItems = [
   },
   {
     id: 'chicken-achari-combo',
-    name: 'Chicken Achari',
+    name: 'Chicken Achari (Combo Deal)',
     category: 'combo',
     subCategory: 'specials',
     subCategoryLabel: 'DesiKart Specials',
@@ -80,12 +116,65 @@ export const menuItems = [
   },
 
   /* =========================================================
+     CHICKEN DISHES
+  ========================================================= */
+  // Chicken Qorma (NO BADGE on Combo)
+  {
+    id: 'chicken-qorma-alacarte',
+    name: 'Chicken Qorma (À La Carte)',
+    category: 'single',
+    subCategory: 'mains',
+    subCategoryLabel: 'Chicken Dishes',
+    image: '/images/menu/chicken_qorma.jpeg',
+    description: 'Traditional chicken qorma cooked with aromatic spices and rich flavours.',
+    variations: [
+      { id: 'single', label: 'Single (250g)', price: 549, complimentary: [] },
+      { id: 'half', label: 'Half (500g)', price: 1090, complimentary: [] },
+      { id: 'full', label: 'Full (1kg)', price: 2190, complimentary: [] }
+    ]
+  },
+  {
+    id: 'chicken-qorma-combo',
+    name: 'Chicken Qorma (Combo Deal)',
+    category: 'combo',
+    subCategory: 'mains',
+    subCategoryLabel: 'Chicken Dishes',
+    image: '/images/menu/chicken_qorma.jpeg',
+    description: 'Traditional chicken qorma complete meal served with freshly baked naan, salad & chilled drink.',
+    variations: [
+      { id: 'single', label: 'Single (250g)', price: 749, complimentary: COMBO_INCLUSIONS_BY_PORTION.single },
+      { id: 'half', label: 'Half (500g)', price: 1290, complimentary: COMBO_INCLUSIONS_BY_PORTION.half },
+      { id: 'full', label: 'Full (1kg)', price: 2540, complimentary: COMBO_INCLUSIONS_BY_PORTION.full }
+    ]
+  },
+
+  /* =========================================================
+     DESSERTS
+  ========================================================= */
+  // Special Khoya Kheer
+  {
+    id: 'special-khoya-kheer',
+    name: 'Special Khoya Kheer',
+    category: 'dessert',
+    subCategory: 'dessert',
+    subCategoryLabel: 'Dessert',
+    image: '/images/menu/kheer.jpeg',
+    description: 'Rich, creamy and traditional sweet made with real khoya and premium ingredients.',
+    badge: 'Dessert',
+    variations: [
+      { id: 'single', label: 'Single (150-160g)', price: 449, complimentary: [] },
+      { id: 'half', label: 'Half (310-330g)', price: 899, complimentary: [] },
+      { id: 'full', label: 'Full (620-640g)', price: 1799, complimentary: [] }
+    ]
+  },
+
+  /* =========================================================
      MAIN DISHES (À LA CARTE & COMBOS)
   ========================================================= */
-  // 3. Beef Nihari
+  // Beef Nihari
   {
     id: 'beef-nihari-alacarte',
-    name: 'Beef Nihari',
+    name: 'Beef Nihari (À La Carte)',
     category: 'single',
     subCategory: 'mains',
     subCategoryLabel: 'Main Dishes',
@@ -99,7 +188,7 @@ export const menuItems = [
   },
   {
     id: 'beef-nihari-combo',
-    name: 'Beef Nihari',
+    name: 'Beef Nihari (Combo Deal)',
     category: 'combo',
     subCategory: 'mains',
     subCategoryLabel: 'Main Dishes',
@@ -112,10 +201,10 @@ export const menuItems = [
     ]
   },
 
-  // 4. Special Nali Beef Nihari
+  // Special Nali Beef Nihari
   {
     id: 'special-nali-nihari-alacarte',
-    name: 'Special Nali Beef Nihari',
+    name: 'Special Nali Beef Nihari (À La Carte)',
     category: 'single',
     subCategory: 'mains',
     subCategoryLabel: 'Main Dishes',
@@ -130,7 +219,7 @@ export const menuItems = [
   },
   {
     id: 'special-nali-nihari-combo',
-    name: 'Special Nali Beef Nihari',
+    name: 'Special Nali Beef Nihari (Combo Deal)',
     category: 'combo',
     subCategory: 'mains',
     subCategoryLabel: 'Main Dishes',
@@ -144,10 +233,10 @@ export const menuItems = [
     ]
   },
 
-  // 5. Beef Paya
+  // Beef Paya
   {
     id: 'beef-paya-alacarte',
-    name: 'Beef Paya',
+    name: 'Beef Paya (À La Carte)',
     category: 'single',
     subCategory: 'mains',
     subCategoryLabel: 'Main Dishes',
@@ -161,7 +250,7 @@ export const menuItems = [
   },
   {
     id: 'beef-paya-combo',
-    name: 'Beef Paya',
+    name: 'Beef Paya (Combo Deal)',
     category: 'combo',
     subCategory: 'mains',
     subCategoryLabel: 'Main Dishes',
@@ -174,10 +263,10 @@ export const menuItems = [
     ]
   },
 
-  // 6. Special Nali Beef Paya
+  // Special Nali Beef Paya
   {
     id: 'special-nali-paya-alacarte',
-    name: 'Special Nali Beef Paya',
+    name: 'Special Nali Beef Paya (À La Carte)',
     category: 'single',
     subCategory: 'mains',
     subCategoryLabel: 'Main Dishes',
@@ -192,7 +281,7 @@ export const menuItems = [
   },
   {
     id: 'special-nali-paya-combo',
-    name: 'Special Nali Beef Paya',
+    name: 'Special Nali Beef Paya (Combo Deal)',
     category: 'combo',
     subCategory: 'mains',
     subCategoryLabel: 'Main Dishes',
@@ -206,10 +295,10 @@ export const menuItems = [
     ]
   },
 
-  // 7. Degi Beef Qorma
+  // Degi Beef Qorma
   {
     id: 'degi-qorma-alacarte',
-    name: 'Degi Beef Qorma',
+    name: 'Degi Beef Qorma (À La Carte)',
     category: 'single',
     subCategory: 'mains',
     subCategoryLabel: 'Main Dishes',
@@ -223,7 +312,7 @@ export const menuItems = [
   },
   {
     id: 'degi-qorma-combo',
-    name: 'Degi Beef Qorma',
+    name: 'Degi Beef Qorma (Combo Deal)',
     category: 'combo',
     subCategory: 'mains',
     subCategoryLabel: 'Main Dishes',
@@ -236,10 +325,10 @@ export const menuItems = [
     ]
   },
 
-  // 8. Beef Haleem
+  // Beef Haleem
   {
     id: 'beef-haleem-alacarte',
-    name: 'Beef Haleem',
+    name: 'Beef Haleem (À La Carte)',
     category: 'single',
     subCategory: 'mains',
     subCategoryLabel: 'Main Dishes',
@@ -253,7 +342,7 @@ export const menuItems = [
   },
   {
     id: 'beef-haleem-combo',
-    name: 'Beef Haleem',
+    name: 'Beef Haleem (Combo Deal)',
     category: 'combo',
     subCategory: 'mains',
     subCategoryLabel: 'Main Dishes',
@@ -266,10 +355,10 @@ export const menuItems = [
     ]
   },
 
-  // 9. Kalay Channay
+  // Kalay Channay
   {
     id: 'kalay-channay-alacarte',
-    name: 'Kalay Channay',
+    name: 'Kalay Channay (À La Carte)',
     category: 'single',
     subCategory: 'mains',
     subCategoryLabel: 'Main Dishes',
@@ -283,7 +372,7 @@ export const menuItems = [
   },
   {
     id: 'kalay-channay-combo',
-    name: 'Kalay Channay',
+    name: 'Kalay Channay (Combo Deal)',
     category: 'combo',
     subCategory: 'mains',
     subCategoryLabel: 'Main Dishes',
